@@ -9,6 +9,114 @@
   body{
     margin:0;
     font-family:Arial, sans-serif;
+    background:url("image6.png") center/cover no-repeat fixed;
+    text-align:center;
+    padding:20px;
+  }
+
+  /* KHUNG TIÊU ĐỀ */
+  .title-box{
+    background: rgba(128,128,128,0.8); /* xám mờ 50% */
+    border-radius:15px;
+    padding:20px 15px;
+    display:inline-block;
+    margin-bottom:40px;
+  }
+
+  .title{
+    color:white;
+    text-shadow:2px 2px 5px #000;
+    font-weight:bold;
+    line-height:1.4;
+  }
+
+  .title div{
+    font-size: clamp(18px, 4vw, 40px);
+  }
+
+  .container{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    max-width:1000px;
+    margin:auto;
+    gap:20px;
+  }
+
+  .item{
+    flex:1;
+    text-align:center;
+  }
+
+  .item img{
+    width:100%;
+    max-width:300px;
+    cursor:pointer;
+    transition: transform 0.3s;
+  }
+
+  .item img:hover{
+    transform:scale(1.05);
+  }
+
+  .label{
+    margin-top:10px;
+    font-size: clamp(14px, 2vw, 22px);
+    font-weight:bold;
+    color:white;
+    text-shadow:1px 1px 3px #000;
+  }
+
+  @media(max-width:768px){
+    .container{
+      flex-direction:column;
+    }
+  }
+</style>
+
+</head>
+<body>
+
+<!-- TIÊU ĐỀ CÓ NỀN -->
+<div class="title-box">
+  <div class="title">
+    <div>DERBY ĐỨC TRỌNG - ĐƠN DƯƠNG</div>
+    <div>PICKLEBALL CUP</div>
+    <div>04/04/2026</div>
+  </div>
+</div>
+
+<!-- 2 HÌNH -->
+<div class="container">
+
+  <div class="item">
+    <a href="https://ductrong49.github.io/Pick/48.html">
+      <img src="48.png" alt="4.8">
+    </a>
+    <div class="label">Giải đấu trình 4.8</div>
+  </div>
+
+  <div class="item">
+    <a href="https://ductrong49.github.io/Pick/52.html">
+      <img src="52.png" alt="5.2">
+    </a>
+    <div class="label">Giải đấu trình 5.2</div>
+  </div>
+
+</div>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pickleball Cup</title>
+
+<style>
+  body{
+    margin:0;
+    font-family:Arial, sans-serif;
     background:url("image4.jpg") center/cover no-repeat fixed;
     text-align:center;
     padding:20px;
