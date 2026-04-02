@@ -18,7 +18,6 @@
     color:white;
     text-shadow:2px 2px 4px #000;
     margin:0 0 6px 0;
-    line-height:1.2;
     font-size: clamp(20px, 4vw, 40px);
   }
   h2.title{
@@ -29,6 +28,20 @@
     text-shadow:2px 2px 4px #000;
   }
 
+  .link-bar{
+    text-align:left;
+    margin:0 0 12px 0;
+  }
+  .link-bar a{
+    color:#000;
+    font-weight:bold;
+    margin-right:15px;
+    text-decoration:none;
+  }
+  .link-bar a:hover{
+    text-decoration:underline;
+  }
+
   .block{
     background:#ffffffdd;
     padding:12px;
@@ -36,20 +49,17 @@
     margin-bottom:20px;
     border:2px solid #444;
   }
+
   table{
     width:100%;
     border-collapse:collapse;
     margin-bottom:8px;
   }
 
-  td,th{
+  td{
     border:1px solid #444;
     padding:6px 8px;
-
-    /* CHO PHÉP XUỐNG DÒNG */
-    white-space: normal !important;
     word-break: break-word;
-
     font-size: clamp(8px, 1.4vw, 18px);
   }
 
@@ -59,7 +69,6 @@
     background:#eee;
     margin:10px 0;
     border-left:5px solid #333;
-    white-space: nowrap;
     font-size: clamp(14px, 1.6vw, 20px);
   }
 
@@ -76,6 +85,19 @@
     padding:8px;
     border:1px solid #ccc;
   }
+
+  /* SƠ ĐỒ */
+  .sodo-wrapper{
+    overflow:auto;
+    width:100%;
+    height:500px;
+    border:1px solid #ccc;
+  }
+  .sodo-wrapper iframe{
+    width:1200px; /* có thể tăng nếu sơ đồ rộng */
+    height:800px;
+    border:none;
+  }
 </style>
 
 <script src="https://www.gstatic.com/charts/loader.js"></script>
@@ -84,7 +106,6 @@ google.charts.load('current', {'packages':['table']});
 
 const SHEET_ID = "1j0hw9jfG6d2KcPP7r6qrgjf2zFMDjZNieYKCjOaFpls";
 
-/* Promise-based wrapper */
 function loadSheetPromise(sheetName, range){
   return new Promise((resolve) => {
     const q = new google.visualization.Query(
@@ -100,11 +121,6 @@ function loadSheetPromise(sheetName, range){
   });
 }
 
-/* ======================================
-   XỬ LÝ XUỐNG DÒNG CHO CỘT C & D
-   CHỈ ÁP DỤNG CHO SHEET: bang, 1.8, bk
-   ====================================== */
-
 function tableToHTML(data, sheetName=""){
   if(!data) return '<div style="padding:8px;color:#a00">Không thể tải dữ liệu</div>';
 
@@ -112,28 +128,21 @@ function tableToHTML(data, sheetName=""){
 
   for(let r=0;r<data.getNumberOfRows();r++){
     html += "<tr>";
-
     for(let c=0;c<data.getNumberOfColumns();c++){
-      let cell = data.getValue(r,c) ?? "";
+      let cell = data.getFormattedValue(r,c) ?? "";
 
-      // CHỈ xử lý nếu là sheet bang, 1.8, bk AND cột C,D (index 2,3)
       if (["bang","1.8","bk"].includes(sheetName) && (c === 2 || c === 3)) {
         cell = cell.toString().replace(/ - /g, "<br>");
       }
 
       html += `<td>${cell}</td>`;
     }
-
     html += "</tr>";
   }
 
   html += "</tbody></table>";
   return html;
 }
-
-/* ============================
-   LOAD & RENDER (theo thứ tự)
-   ============================ */
 
 async function loadDoiOrdered(){
   const ranges = [
@@ -201,6 +210,11 @@ google.charts.setOnLoadCallback(()=>{
 <h2 class="title">PICKLEBALL CUP</h2>
 <h2 class="title">04/04/2026</h2>
 
+<div class="link-bar">
+  <a href="https://www.google.com" target="_blank">Google</a>
+  <a href="https://tuoitre.vn" target="_blank">Tuổi Trẻ</a>
+</div>
+
 <div class="block">
   <div class="section-title">DANH SÁCH ĐỘI</div>
   <div id="sheet-doi"></div>
@@ -224,6 +238,14 @@ google.charts.setOnLoadCallback(()=>{
 <div class="block">
   <div class="section-title">CHUNG KẾT</div>
   <div id="sheet-ck"></div>
+</div>
+
+<!-- SƠ ĐỒ CHUẨN 100% -->
+<div class="block">
+  <div class="section-title">SƠ ĐỒ</div>
+  <div class="sodo-wrapper">
+    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9hoY733ggg0AyfuQHPsqLwPlj5C1RuGg6D2hTfp6Rd1_yZEi92MIuPVrKbUnmLITNppfvndY5fjJr/pubhtml?gid=999061385&single=true&single=true&range=A1:H21&widget=false&headers=false"></iframe>
+  </div>
 </div>
 
 </body>
