@@ -3,249 +3,106 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ĐÔI 4.8</title>
+<title>Pickleball Cup</title>
 
 <style>
   body{
     margin:0;
     font-family:Arial, sans-serif;
-    background:url("image3.jpg") center/cover fixed;
+    background:url("image4.jpeg") center/cover no-repeat fixed;
+    text-align:center;
     padding:20px;
   }
 
-  h1{
-    text-align:center;
-    color:white;
-    text-shadow:2px 2px 4px #000;
-    margin:0 0 6px 0;
-    font-size: clamp(20px, 4vw, 40px);
-  }
-  h2.title{
-    text-align:center;
-    color:white;
-    margin:0 0 18px 0;
-    font-size: clamp(16px, 3vw, 28px);
-    text-shadow:2px 2px 4px #000;
+  /* KHUNG TIÊU ĐỀ */
+  .title-box{
+    background: rgba(128,128,128,0.5); /* xám mờ 50% */
+    border-radius:15px;
+    padding:20px 15px;
+    display:inline-block;
+    margin-bottom:40px;
   }
 
-  .link-bar{
-    text-align:left;
-    margin:0 0 12px 0;
-  }
-  .link-bar a{
-    color:#000;
+  .title{
+    color:white;
+    text-shadow:2px 2px 5px #000;
     font-weight:bold;
-    margin-right:15px;
-    text-decoration:none;
-  }
-  .link-bar a:hover{
-    text-decoration:underline;
+    line-height:1.4;
   }
 
-  .block{
-    background:#ffffffdd;
-    padding:12px;
-    border-radius:10px;
-    margin-bottom:20px;
-    border:2px solid #444;
+  .title div{
+    font-size: clamp(18px, 4vw, 40px);
   }
 
-  table{
-    width:100%;
-    border-collapse:collapse;
-    margin-bottom:8px;
-  }
-
-  td{
-    border:1px solid #444;
-    padding:6px 8px;
-    word-break: break-word;
-    font-size: clamp(8px, 1.4vw, 18px);
-  }
-
-  .section-title{
-    padding:8px;
-    font-weight:700;
-    background:#eee;
-    margin:10px 0;
-    border-left:5px solid #333;
-    font-size: clamp(14px, 1.6vw, 20px);
-  }
-
-  .doi-scroll{
+  .container{
     display:flex;
-    gap:12px;
-    overflow-x:auto;
-    padding:8px 0;
-  }
-  .doi-card{
-    min-width:160px;
-    background:#fff;
-    border-radius:8px;
-    padding:8px;
-    border:1px solid #ccc;
+    justify-content:space-between;
+    align-items:center;
+    max-width:1000px;
+    margin:auto;
+    gap:20px;
   }
 
-  /* SƠ ĐỒ */
-  .sodo-wrapper{
-    overflow:auto;
-    width:100%;
-    height:500px;
-    border:1px solid #ccc;
+  .item{
+    flex:1;
+    text-align:center;
   }
-  .sodo-wrapper iframe{
-    width:1200px; /* có thể tăng nếu sơ đồ rộng */
-    height:800px;
-    border:none;
+
+  .item img{
+    width:100%;
+    max-width:300px;
+    cursor:pointer;
+    transition: transform 0.3s;
+  }
+
+  .item img:hover{
+    transform:scale(1.05);
+  }
+
+  .label{
+    margin-top:10px;
+    font-size: clamp(14px, 2vw, 22px);
+    font-weight:bold;
+    color:white;
+    text-shadow:1px 1px 3px #000;
+  }
+
+  @media(max-width:768px){
+    .container{
+      flex-direction:column;
+    }
   }
 </style>
 
-<script src="https://www.gstatic.com/charts/loader.js"></script>
-<script>
-google.charts.load('current', {'packages':['table']});
-
-const SHEET_ID = "1j0hw9jfG6d2KcPP7r6qrgjf2zFMDjZNieYKCjOaFpls";
-
-function loadSheetPromise(sheetName, range){
-  return new Promise((resolve) => {
-    const q = new google.visualization.Query(
-      `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&range=${encodeURIComponent(range)}`
-    );
-    q.send(res=>{
-      if(res.isError()){
-        resolve(null);
-      } else {
-        resolve(res.getDataTable());
-      }
-    });
-  });
-}
-
-function tableToHTML(data, sheetName=""){
-  if(!data) return '<div style="padding:8px;color:#a00">Không thể tải dữ liệu</div>';
-
-  let html = "<table><tbody>";
-
-  for(let r=0;r<data.getNumberOfRows();r++){
-    html += "<tr>";
-    for(let c=0;c<data.getNumberOfColumns();c++){
-      let cell = data.getFormattedValue(r,c) ?? "";
-
-      if (["bang","1.8","bk"].includes(sheetName) && (c === 2 || c === 3)) {
-        cell = cell.toString().replace(/ - /g, "<br>");
-      }
-
-      html += `<td>${cell}</td>`;
-    }
-    html += "</tr>";
-  }
-
-  html += "</tbody></table>";
-  return html;
-}
-
-async function loadDoiOrdered(){
-  const ranges = [
-    {range:"A1:B5", label:"Bảng A"},
-    {range:"A7:B11", label:"Bảng B"},
-    {range:"A13:B17", label:"Bảng C"},
-    {range:"A19:B23", label:"Bảng D"}
-  ];
-
-  let html = '<div class="doi-scroll">';
-  for(const r of ranges){
-    const data = await loadSheetPromise("doi", r.range);
-    html += `<div class="doi-card"><div class="section-title" style="margin:0 0 8px 0">${r.label}</div>`;
-    html += tableToHTML(data, "doi");
-    html += '</div>';
-  }
-  html += '</div>';
-
-  document.getElementById('sheet-doi').innerHTML = html;
-}
-
-async function loadBangOrdered(){
-  const ranges = [
-    {range:"A2:G8", label:"BẢNG A"},
-    {range:"A11:G17", label:"BẢNG B"},
-    {range:"A20:G26", label:"BẢNG C"},
-    {range:"A29:G35", label:"BẢNG D"}
-  ];
-
-  let html = "";
-  for(const r of ranges){
-    const data = await loadSheetPromise("bang", r.range);
-    html += `<div class="section-title">${r.label}</div>`;
-    html += tableToHTML(data, "bang");
-  }
-  document.getElementById('sheet-bang').innerHTML = html;
-}
-
-async function loadOtherSheets(){
-  const data18 = await loadSheetPromise("1.8","A1:E12");
-  document.getElementById('sheet-18').innerHTML = tableToHTML(data18, "1.8");
-
-  const databk = await loadSheetPromise("bk","A1:D7");
-  document.getElementById('sheet-bk').innerHTML = tableToHTML(databk, "bk");
-
-  const datack = await loadSheetPromise("ck","A2:C4");
-  document.getElementById('sheet-ck').innerHTML = tableToHTML(datack, "ck");
-}
-
-async function reloadAllOrdered(){
-  await loadDoiOrdered();
-  await loadBangOrdered();
-  await loadOtherSheets();
-}
-
-google.charts.setOnLoadCallback(()=>{
-  reloadAllOrdered();
-  setInterval(reloadAllOrdered, 15000);
-});
-</script>
 </head>
 <body>
 
-<h1>DEBY ĐỨC TRỌNG  - ĐƠN DƯƠNG (ĐÔI 4.8)</h1>
-<h2 class="title">PICKLEBALL CUP</h2>
-<h2 class="title">04/04/2026</h2>
-
-<div class="link-bar">
-  <a href="https://www.google.com" target="_blank">Google</a>
-  <a href="https://tuoitre.vn" target="_blank">Tuổi Trẻ</a>
-</div>
-
-<div class="block">
-  <div class="section-title">DANH SÁCH ĐỘI</div>
-  <div id="sheet-doi"></div>
-</div>
-
-<div class="block">
-  <div class="section-title">BẢNG THI ĐẤU</div>
-  <div id="sheet-bang"></div>
-</div>
-
-<div class="block">
-  <div class="section-title">VÒNG LOẠI 1/8</div>
-  <div id="sheet-18"></div>
-</div>
-
-<div class="block">
-  <div class="section-title">BÁN KẾT</div>
-  <div id="sheet-bk"></div>
-</div>
-
-<div class="block">
-  <div class="section-title">CHUNG KẾT</div>
-  <div id="sheet-ck"></div>
-</div>
-
-<!-- SƠ ĐỒ CHUẨN 100% -->
-<div class="block">
-  <div class="section-title">SƠ ĐỒ</div>
-  <div class="sodo-wrapper">
-    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9hoY733ggg0AyfuQHPsqLwPlj5C1RuGg6D2hTfp6Rd1_yZEi92MIuPVrKbUnmLITNppfvndY5fjJr/pubhtml?gid=999061385&single=true&single=true&range=A1:H21&widget=false&headers=false"></iframe>
+<!-- TIÊU ĐỀ CÓ NỀN -->
+<div class="title-box">
+  <div class="title">
+    <div>DERBY ĐỨC TRỌNG - ĐƠN DƯƠNG</div>
+    <div>PICKLEBALL CUP</div>
+    <div>04/04/2026</div>
   </div>
+</div>
+
+<!-- 2 HÌNH -->
+<div class="container">
+
+  <div class="item">
+    <a href="https://ductrong49.github.io/Pick/48.html">
+      <img src="48.png" alt="4.8">
+    </a>
+    <div class="label">Giải đấu trình 4.8</div>
+  </div>
+
+  <div class="item">
+    <a href="https://ductrong49.github.io/Pick/52.html">
+      <img src="52.png" alt="5.2">
+    </a>
+    <div class="label">Giải đấu trình 5.2</div>
+  </div>
+
 </div>
 
 </body>
