@@ -1,142 +1,832 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Bảng Điểm Pickleball</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Điểm Pickleball</title>
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.1.1/400.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.1.1/600.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.1.1/700.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a56db;
+            --primary-light: #3b82f6;
+            --primary-dark: #1e40af;
+            --bg: #f0f4f8;
+            --card-bg: #ffffff;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --border: #e5e7eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
 
-<style>
-body {
-    font-family: Arial;
-    margin: 0;
-    background: #0f172a;
-    color: white;
-}
-.container { padding: 10px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-h2 {
-    text-align: center;
-    color: #38bdf8;
-    margin: 15px 0;
-}
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 20px;
+        }
 
-.table-box {
-    overflow-x: auto;
-    margin-bottom: 20px;
-}
+        .header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            color: white;
+            padding: 20px 16px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(26, 86, 219, 0.3);
+        }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #1e293b;
-    border-radius: 10px;
-    overflow: hidden;
-}
+        .header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: 0.5px; }
+        .header p { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; }
 
-th, td {
-    padding: 10px;
-    text-align: center;
-    border-bottom: 1px solid #334155;
-}
+        .tabs-container {
+            background: var(--card-bg);
+            position: sticky;
+            top: 0;
+            z-index: 99;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border-bottom: 1px solid var(--border);
+        }
 
-th { background: #0284c7; }
+        .tabs {
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding: 0 8px;
+        }
 
-tr:nth-child(even) { background: #0f172a; }
+        .tabs::-webkit-scrollbar { display: none; }
 
-</style>
+        .tab-btn {
+            flex: none;
+            padding: 12px 16px;
+            border: none;
+            background: transparent;
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active { color: var(--primary); }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 16px;
+            right: 16px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .tab-btn:hover { color: var(--primary); background: rgba(26, 86, 219, 0.05); }
+
+        .content { padding: 16px 12px; max-width: 800px; margin: 0 auto; }
+
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .group-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+        }
+
+        .group-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .group-badge {
+            background: var(--primary);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+
+        thead th {
+            background: var(--primary);
+            color: white;
+            padding: 10px 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        thead th:first-child { border-radius: 10px 0 0 0; text-align: left; padding-left: 12px; }
+        thead th:last-child { border-radius: 0 10px 0 0; }
+
+        tbody td { padding: 10px 8px; text-align: center; border-bottom: 1px solid var(--border); }
+        tbody td:first-child { text-align: left; padding-left: 12px; font-weight: 600; }
+        tbody tr:last-child td:first-child { border-radius: 0 0 0 10px; }
+        tbody tr:last-child td:last-child { border-radius: 0 0 10px 0; }
+        tbody tr:hover { background: rgba(26, 86, 219, 0.04); }
+        tbody tr:last-child td { border-bottom: none; }
+
+        .rank-1 td:first-child::before { content: '🥇 '; }
+        .rank-2 td:first-child::before { content: '🥈 '; }
+        .rank-3 td:first-child::before { content: '🥉 '; }
+
+        .rank-1 { background: linear-gradient(90deg, rgba(251,191,36,0.15) 0%, transparent 60%); }
+        .rank-2 { background: linear-gradient(90deg, rgba(156,163,175,0.1) 0%, transparent 60%); }
+        .rank-3 { background: linear-gradient(90deg, rgba(217,119,6,0.1) 0%, transparent 60%); }
+
+        .points-cell { font-weight: 700; color: var(--primary); }
+        .coef-cell { color: var(--text-light); font-weight: 500; }
+
+        .bracket-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+            overflow-x: auto;
+        }
+
+        .bracket-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .match-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .match-header {
+            background: var(--primary);
+            color: white;
+            padding: 6px 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .match-team {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            font-size: 0.85rem;
+        }
+
+        .match-team:not(:last-child) { border-bottom: 1px solid var(--border); }
+
+        .match-team.winner { background: rgba(16, 185, 129, 0.08); }
+        .match-team.winner .team-name { color: var(--success); font-weight: 700; }
+
+        .team-name { font-weight: 600; flex: 1; }
+        .team-score { font-weight: 700; font-size: 1rem; color: var(--text); min-width: 30px; text-align: center; }
+        .match-team.winner .team-score { color: var(--success); }
+
+        .sodo-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+            overflow-x: auto;
+        }
+
+        .sodo-container table { font-size: 0.7rem; min-width: 600px; }
+        .sodo-container table td, .sodo-container table th { padding: 4px 6px; text-align: center; border: 1px solid #ddd; white-space: nowrap; }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .error-msg {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 12px;
+            padding: 16px;
+            color: var(--danger);
+            text-align: center;
+            font-size: 0.85rem;
+            margin: 16px 0;
+        }
+
+        .refresh-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.2s;
+        }
+
+        .refresh-btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .refresh-btn:active { transform: translateY(0); }
+
+        .match-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        @media (min-width: 640px) { .match-grid { grid-template-columns: 1fr 1fr; } }
+
+        .match-detail-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; margin-bottom: 8px; }
+
+        .match-detail-table th {
+            background: var(--primary);
+            color: white;
+            padding: 8px 6px;
+            font-weight: 600;
+            font-size: 0.72rem;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .match-detail-table th:first-child { border-radius: 8px 0 0 0; text-align: left; padding-left: 10px; }
+        .match-detail-table th:last-child { border-radius: 0 8px 0 0; }
+        .match-detail-table td { padding: 8px 6px; text-align: center; border-bottom: 1px solid var(--border); }
+        .match-detail-table td:first-child { text-align: left; padding-left: 10px; }
+        .match-detail-table tbody tr:hover { background: rgba(26, 86, 219, 0.04); }
+        .winner-row { background: rgba(16, 185, 129, 0.08) !important; }
+        .winner-row td { color: var(--success); font-weight: 700; }
+
+        .cluster-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin: 16px 0 8px;
+            padding: 4px 10px;
+            background: rgba(26, 86, 219, 0.08);
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .last-updated {
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text-light);
+            margin-top: 24px;
+            padding: 12px;
+        }
+
+        .api-key-input {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .api-key-input label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #0c4a6e;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .api-key-input input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            margin-bottom: 8px;
+        }
+
+        .api-key-input button {
+            background: #0284c7;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .api-key-input button:hover { background: #0369a1; }
+
+        .help-text {
+            font-size: 0.72rem;
+            color: #64748b;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .help-text a { color: #0284c7; text-decoration: underline; }
+    </style>
 </head>
-
 <body>
 
-<div class="container">
+<div class="header">
+    <div style="font-size: 2rem; margin-bottom: 6px;">🏓</div>
+    <h1>BẢNG ĐIỂM PICKLEBALL</h1>
+    <p>Giải đấu Pickleball 2026</p>
+</div>
 
-<h2>🏆 Bảng A</h2>
-<div class="table-box"><table id="A"></table></div>
+<div class="tabs-container">
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="groups">Bảng Nhóm</button>
+        <button class="tab-btn" data-tab="bang">Vòng Bảng</button>
+        <button class="tab-btn" data-tab="tukai">Tứ Kết</button>
+        <button class="tab-btn" data-tab="banket">Bán Kết</button>
+        <button class="tab-btn" data-tab="chungket">Chung Kết</button>
+        <button class="tab-btn" data-tab="sodo">Sơ Đồ</button>
+    </div>
+</div>
 
-<h2>🏆 Bảng B</h2>
-<div class="table-box"><table id="B"></table></div>
+<div class="content">
+    <div id="api-key-input" class="api-key-input" style="display:none;">
+        <label>🔑 Nhập Google API Key (hoặc Sheet ID đã chia sẻ công khai):</label>
+        <input type="text" id="apiKeyInput" placeholder="Dán API Key hoặc để trống nếu sheet public">
+        <button onclick="saveApiKey()">Lưu & Tải lại</button>
+        <div class="help-text">
+            ⚠️ Nếu sheet chưa chia sẻ công khai, bạn cần tạo Google API Key tại:
+            <a href="https://console.cloud.google.com/apis/credentials" target="_blank">Google Cloud Console</a>
+            <br>Hoặc chia sẻ sheet: Mở Google Sheet → Nút "Share" → "Anyone with the link" → Viewer
+        </div>
+    </div>
 
-<h2>🏆 Bảng C</h2>
-<div class="table-box"><table id="C"></table></div>
+    <div id="tab-groups" class="tab-content active">
+        <div id="groups-loading" class="loading"><div class="spinner"></div><span>Đang tải dữ liệu...</span></div>
+        <div id="groups-content"></div>
+    </div>
 
-<h2>🏆 Bảng D</h2>
-<div class="table-box"><table id="VOT"></table></div>
+    <div id="tab-bang" class="tab-content">
+        <div id="bang-loading" class="loading"><div class="spinner"></div><span>Đang tải dữ liệu...</span></div>
+        <div id="bang-content"></div>
+    </div>
 
-<h2>📊 Vòng bảng</h2>
-<div class="table-box"><table id="BANG"></table></div>
+    <div id="tab-tukai" class="tab-content">
+        <div id="tukai-loading" class="loading"><div class="spinner"></div><span>Đang tải dữ liệu...</span></div>
+        <div id="tukai-content"></div>
+    </div>
 
-<h2>🔥 Tứ kết</h2>
-<div class="table-box"><table id="TK"></table></div>
+    <div id="tab-banket" class="tab-content">
+        <div id="banket-loading" class="loading"><div class="spinner"></div><span>Đang tải dữ liệu...</span></div>
+        <div id="banket-content"></div>
+    </div>
 
-<h2>🔥 Bán kết</h2>
-<div class="table-box"><table id="BK"></table></div>
+    <div id="tab-chungket" class="tab-content">
+        <div id="chungket-loading" class="loading"><div class="spinner"></div><span>Đang tải dữ liệu...</span></div>
+        <div id="chungket-content"></div>
+    </div>
 
-<h2>🏆 Chung kết</h2>
-<div class="table-box"><table id="CK"></table></div>
+    <div id="tab-sodo" class="tab-content">
+        <div id="sodo-loading" class="loading"><div class="spinner"></div><span>Đang tải dữ liệu...</span></div>
+        <div id="sodo-content"></div>
+    </div>
 
+    <div class="last-updated" id="last-updated"></div>
 </div>
 
 <script>
+const SHEET_ID = '11R0QRVS5-tyNEXHFJh8FJ5KxlfpCWvUQkDByaIiPPGU';
 
-const sheetID = "11R0QRVS5-tyNEXHFJh8FJ5KxlfpCWvUQkDByaIiPPGU";
+// PROXY endpoints để bypass CORS - thử lần lượt
+const PROXY_LIST = [
+    url => `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+    url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+    url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
+];
 
-function loadRange(sheet, range, tableId) {
-    const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${sheet}&range=${range}`;
+let currentProxyIndex = 0;
 
-    fetch(url)
-    .then(res => res.text())
-    .then(rep => {
-        const json = JSON.parse(rep.substr(47).slice(0, -2));
-        const table = document.getElementById(tableId);
-        table.innerHTML = "";
-
-        const cols = json.table.cols;
-        const rows = json.table.rows;
-
-        // header
-        let header = "<tr>";
-        cols.forEach(col => {
-            header += `<th>${col.label || ""}</th>`;
-        });
-        header += "</tr>";
-        table.innerHTML += header;
-
-        // data
-        rows.forEach(r => {
-            let tr = "<tr>";
-            r.c.forEach(c => {
-                tr += `<td>${c ? c.v : ""}</td>`;
-            });
-            tr += "</tr>";
-            table.innerHTML += tr;
-        });
-    })
-    .catch(err => {
-        document.getElementById(tableId).innerHTML = "<tr><td>Lỗi load dữ liệu</td></tr>";
-    });
+function getSheetUrl(sheetName, range) {
+    return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}&range=${encodeURIComponent(range)}`;
 }
 
-// ===== LOAD ĐÚNG RANGE =====
+async function fetchWithProxy(url, proxyIndex = 0) {
+    if (proxyIndex >= PROXY_LIST.length) {
+        throw new Error('Không thể kết nối đến Google Sheets. Vui lòng kiểm tra sheet đã được chia sẻ công khai chưa.');
+    }
 
-// Bảng A/B/C/Vot (F2:H5)
-loadRange("A", "F2:H5", "A");
-loadRange("B", "F2:H5", "B");
-loadRange("C", "F2:H5", "C");
-loadRange("Vot", "F2:H5", "VOT");
+    const proxyUrl = PROXY_LIST[proxyIndex](url);
 
-// Vòng bảng
-loadRange("bang", "A1:G26", "BANG");
+    try {
+        const response = await fetch(proxyUrl);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-// Tứ kết
-loadRange("1.8", "A2:E12", "TK");
+        let data;
+        // allorigins wraps in {contents: "..."}
+        if (proxyUrl.includes('allorigins')) {
+            const wrapper = await response.json();
+            data = wrapper.contents;
+        } else {
+            data = await response.text();
+        }
 
-// Bán kết
-loadRange("bk", "A3:D7", "BK");
+        return data;
+    } catch (err) {
+        console.warn(`Proxy ${proxyIndex} failed, trying next...`, err);
+        return fetchWithProxy(url, proxyIndex + 1);
+    }
+}
 
-// Chung kết
-loadRange("ck", "A3:C4", "CK");
+async function fetchSheet(sheetName, range) {
+    const url = getSheetUrl(sheetName, range);
+    const text = await fetchWithProxy(url);
 
+    // Parse JSONP response: google.visualization.Query.setResponse({...});
+    const jsonMatch = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);/);
+    if (!jsonMatch) {
+        // Try parsing as plain JSON
+        try {
+            return JSON.parse(text).table;
+        } catch {
+            throw new Error('Không thể parse dữ liệu từ Google Sheets');
+        }
+    }
+
+    return JSON.parse(jsonMatch[1]).table;
+}
+
+function getCellValue(row, colIndex) {
+    if (!row.c || !row.c[colIndex]) return '';
+    const cell = row.c[colIndex];
+    if (cell.f) return cell.f;
+    if (cell.v !== null && cell.v !== undefined) return String(cell.v);
+    return '';
+}
+
+function renderGroupTable(sheetName, title, badge) {
+    const container = document.getElementById('groups-content');
+    const loading = document.getElementById('groups-loading');
+
+    fetchSheet(sheetName, 'F2:H5')
+        .then(table => {
+            loading.style.display = 'none';
+            let html = `<div class="group-card">
+                <div class="group-title">
+                    <div class="group-badge">${badge}</div>
+                    ${title}
+                </div>
+                <table>
+                    <thead>
+                        <tr><th>Đội</th><th>Điểm</th><th>Hệ số</th></tr>
+                    </thead>
+                    <tbody>`;
+
+            table.rows.forEach((row, i) => {
+                const name = getCellValue(row, 0);
+                const points = getCellValue(row, 1);
+                const coef = getCellValue(row, 2);
+                if (!name) return;
+
+                const rankClass = i < 3 ? `rank-${i + 1}` : '';
+                html += `<tr class="${rankClass}">
+                    <td>${name}</td>
+                    <td class="points-cell">${points}</td>
+                    <td class="coef-cell">${coef}</td>
+                </tr>`;
+            });
+
+            html += `</tbody></table></div>`;
+            container.innerHTML += html;
+        })
+        .catch(err => {
+            loading.style.display = 'none';
+            container.innerHTML += `<div class="error-msg">⚠️ ${err.message}<br>
+                <button class="refresh-btn" onclick="location.reload()">🔄 Tải lại</button></div>`;
+        });
+}
+
+function renderBangTable(clusterIndex, range) {
+    const container = document.getElementById('bang-content');
+    const loading = document.getElementById('bang-loading');
+    const clusterLabels = ['Cụm 1', 'Cụm 2', 'Cụm 3', 'Cụm 4'];
+
+    fetchSheet('bang', range)
+        .then(table => {
+            loading.style.display = 'none';
+            if (!table.rows || table.rows.length === 0) return;
+
+            let html = `<div class="bracket-container">
+                <div class="bracket-title">📋 ${clusterLabels[clusterIndex]}</div>`;
+
+            // Detect if first row is header
+            let headers = [];
+            let startRow = 0;
+            const firstRow = table.rows[0];
+            if (firstRow && firstRow.c) {
+                for (let c = 0; c < firstRow.c.length; c++) {
+                    const val = getCellValue(firstRow, c);
+                    if (val && val.length > 0) headers.push(val);
+                }
+            }
+
+            if (headers.length > 1) {
+                startRow = 1;
+                html += `<div class="cluster-label">Bảng đấu</div>
+                <table class="match-detail-table">
+                    <thead><tr>`;
+                headers.forEach(h => { html += `<th>${h}</th>`; });
+                html += `</tr></thead><tbody>`;
+
+                for (let r = startRow; r < table.rows.length; r++) {
+                    const row = table.rows[r];
+                    let empty = true;
+                    for (let c = 0; c < headers.length; c++) {
+                        if (getCellValue(row, c)) { empty = false; break; }
+                    }
+                    if (empty) continue;
+
+                    html += `<tr>`;
+                    for (let c = 0; c < headers.length; c++) {
+                        html += `<td>${getCellValue(row, c) || ''}</td>`;
+                    }
+                    html += `</tr>`;
+                }
+                html += `</tbody></table>`;
+            } else {
+                let maxCols = 0;
+                table.rows.forEach(r => { if (r.c && r.c.length > maxCols) maxCols = r.c.length; });
+
+                html += `<table class="match-detail-table"><tbody>`;
+                table.rows.forEach(row => {
+                    let empty = true;
+                    for (let c = 0; c < maxCols; c++) {
+                        if (getCellValue(row, c)) { empty = false; break; }
+                    }
+                    if (empty) return;
+
+                    html += `<tr>`;
+                    for (let c = 0; c < maxCols; c++) {
+                        const val = getCellValue(row, c);
+                        html += `<td ${c === 0 && val ? 'style="font-weight:700"' : ''}>${val || ''}</td>`;
+                    }
+                    html += `</tr>`;
+                });
+                html += `</tbody></table>`;
+            }
+
+            html += `</div>`;
+            container.innerHTML += html;
+        })
+        .catch(err => {
+            loading.style.display = 'none';
+            container.innerHTML += `<div class="error-msg">⚠️ ${err.message}</div>`;
+        });
+}
+
+function renderMatchClusters(sheetName, ranges, containerId, titles) {
+    const container = document.getElementById(containerId);
+    const loading = document.getElementById(containerId.replace('-content', '-loading'));
+
+    let allData = [];
+    let completed = 0;
+    const total = ranges.length;
+
+    ranges.forEach((range, idx) => {
+        fetchSheet(sheetName, range)
+            .then(table => {
+                allData[idx] = { range, table };
+                completed++;
+                if (completed === total) renderMatches();
+            })
+            .catch(err => {
+                completed++;
+                allData[idx] = { range, table: { rows: [] } };
+                if (completed === total) renderMatches();
+            });
+    });
+
+    function renderMatches() {
+        loading.style.display = 'none';
+
+        const allEmpty = allData.every(d => !d || !d.table || !d.table.rows || d.table.rows.length === 0);
+        if (allEmpty) {
+            container.innerHTML = `<div class="error-msg">⚠️ Không tải được dữ liệu. Vui lòng đảm bảo sheet đã được chia sẻ công khai.<br>
+                <button class="refresh-btn" onclick="location.reload()">🔄 Tải lại</button></div>`;
+            return;
+        }
+
+        let html = `<div class="match-grid">`;
+
+        allData.forEach((data, i) => {
+            if (!data || !data.table || !data.table.rows) return;
+            const t = data.table;
+            const title = titles && titles[i] ? titles[i] : `Trận ${i + 1}`;
+
+            html += `<div class="match-card">
+                <div class="match-header">${title}</div>`;
+
+            t.rows.forEach(row => {
+                const col0 = getCellValue(row, 0);
+                const col1 = getCellValue(row, 1);
+                const col2 = getCellValue(row, 2);
+                const col3 = getCellValue(row, 3);
+                const col4 = getCellValue(row, 4);
+
+                if (col0 && col1) {
+                    const hasScores = col2 && col3;
+                    let isWin1 = false, isWin2 = false;
+                    if (hasScores) {
+                        const s1 = parseFloat(col2);
+                        const s2 = parseFloat(col3);
+                        if (!isNaN(s1) && !isNaN(s2)) {
+                            if (s1 > s2) isWin1 = true;
+                            if (s2 > s1) isWin2 = true;
+                        }
+                    }
+
+                    html += `<div class="match-team ${isWin1 ? 'winner' : ''}">
+                        <span class="team-name">${col0}</span>
+                        <span class="team-score">${col2 || '-'}</span>
+                    </div>`;
+                    html += `<div class="match-team ${isWin2 ? 'winner' : ''}">
+                        <span class="team-name">${col1}</span>
+                        <span class="team-score">${col3 || '-'}</span>
+                    </div>`;
+                } else if (col0) {
+                    html += `<div class="match-team">
+                        <span class="team-name">${col0}</span>
+                        ${col2 ? `<span class="team-score">${col2}</span>` : ''}
+                    </div>`;
+                }
+            });
+
+            html += `</div>`;
+        });
+
+        html += `</div>`;
+        container.innerHTML = html;
+    }
+}
+
+function renderSodo() {
+    const container = document.getElementById('sodo-content');
+    const loading = document.getElementById('sodo-loading');
+
+    fetchSheet('sodo', 'A1:H21')
+        .then(table => {
+            loading.style.display = 'none';
+            if (!table.rows || table.rows.length === 0) {
+                container.innerHTML = '<div class="error-msg">Không có dữ liệu</div>';
+                return;
+            }
+
+            let html = `<div class="sodo-container">
+                <div class="bracket-title">🏆 Sơ Đồ Vòng Loại Trực Tiếp</div>
+                <table><tbody>`;
+
+            table.rows.forEach(row => {
+                if (!row.c) return;
+                let hasData = false;
+                let maxCols = row.c.length;
+
+                row.c.forEach(c => { if (c && c.v !== null) hasData = true; });
+                if (!hasData) return;
+
+                html += `<tr>`;
+                for (let c = 0; c < maxCols; c++) {
+                    const val = getCellValue(row, c);
+                    html += `<td>${val || ''}</td>`;
+                }
+                html += `</tr>`;
+            });
+
+            html += `</tbody></table></div>`;
+            container.innerHTML = html;
+        })
+        .catch(err => {
+            loading.style.display = 'none';
+            container.innerHTML = `<div class="error-msg">⚠️ ${err.message}<br>
+                <button class="refresh-btn" onclick="location.reload()">🔄 Tải lại</button></div>`;
+        });
+}
+
+// Tab switching
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        const tabId = btn.dataset.tab;
+        document.getElementById(`tab-${tabId}`).classList.add('active');
+    });
+});
+
+function saveApiKey() {
+    const key = document.getElementById('apiKeyInput').value.trim();
+    if (key) {
+        window.API_KEY = key;
+        location.reload();
+    }
+}
+
+// Load all data
+function loadAll() {
+    // Groups
+    renderGroupTable('A', 'Bảng A', 'A');
+    renderGroupTable('B', 'Bảng B', 'B');
+    renderGroupTable('C', 'Bảng C', 'C');
+    renderGroupTable('D', 'Bảng D', 'D');
+
+    // Vòng bảng - 4 cụm
+    renderBangTable(0, 'A1:F8');
+    renderBangTable(1, 'A10:F17');
+    renderBangTable(2, 'A19:F26');
+    renderBangTable(3, 'A28:F35');
+
+    // Tứ kết - 4 trận
+    renderMatchClusters('1.8', ['A2:E3', 'A5:E6', 'A8:E9', 'A11:E12'], 'tukai-content',
+        ['Tứ kết 1', 'Tứ kết 2', 'Tứ kết 3', 'Tứ kết 4']);
+
+    // Bán kết - 2 trận
+    renderMatchClusters('bk', ['A3:D4', 'A6:D7'], 'banket-content',
+        ['Bán kết 1', 'Bán kết 2']);
+
+    // Chung kết - 1 trận
+    renderMatchClusters('ck', ['A3:C4'], 'chungket-content',
+        ['Chung kết']);
+
+    // Sơ đồ
+    renderSodo();
+
+    // Last updated
+    const now = new Date();
+    document.getElementById('last-updated').textContent = `Cập nhật: ${now.toLocaleString('vi-VN')}`;
+}
+
+// Try loading, show API key input if fails
+loadAll();
+
+// Check after 5 seconds, if no data loaded, show API key input
+setTimeout(() => {
+    const groupContent = document.getElementById('groups-content');
+    if (!groupContent.innerHTML.trim()) {
+        document.getElementById('api-key-input').style.display = 'block';
+    }
+}, 5000);
 </script>
 
 </body>
 </html>
+
