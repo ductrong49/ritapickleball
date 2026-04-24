@@ -803,8 +803,8 @@
 
             // Bán kết - sheet "bk"
             var rangesBanKet = [
-                { range: 'A3:D4', title: 'Bán kết 1' },
-                { range: 'A6:D7', title: 'Bán kết 2' }
+                { range: 'A3:D4', title: 'Bán kết 1 - Sân MINA MINƠ' },
+                { range: 'A6:D7', title: 'Bán kết 2 - Sân MINA MINƠ' }
             ];
 
             var banketContainer = document.getElementById('banket-container');
@@ -825,7 +825,7 @@
             var ckContainer = document.getElementById('chungket-container');
             var ckData = await fetchSheetData('ck', 'A3:C4');
             if (ckData) {
-                var ckHTML = renderMatchTable(ckData, 'Trận Chung Kết');
+                var ckHTML = renderMatchTable(ckData, 'Chung Kết - Sân MINA MINƠ');
                 if (ckHTML) {
                     ckContainer.innerHTML = ckHTML;
                 } else {
