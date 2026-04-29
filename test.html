@@ -2,316 +2,309 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Nhập Điểm Thi Đấu</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOÀNG QUỐC VIỆT PICKLEBALL</title>
+
+<!-- Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-    background: #f1f5f9;
-    color: #0f172a;
-    padding-bottom: 24px;
-}
-.header {
-    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  :root {
+    --primary-glow: rgba(0, 255, 255, 0.5);
+    --glass-bg: rgba(20, 20, 35, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.1);
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    /* Placeholder background - replace with your actual background.png if available */
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("background.png"); 
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     color: white;
-    padding: 20px 16px;
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(37,99,235,0.25);
-}
-.header h1 { font-size: 1.3rem; font-weight: 800; }
-.header p { font-size: 0.8rem; opacity: 0.9; margin-top: 4px; }
+    padding: 20px;
+    box-sizing: border-box;
+  }
 
-.container { padding: 14px; max-width: 800px; margin: 0 auto; }
-
-.group-card {
-    background: white;
-    border-radius: 14px;
-    margin-bottom: 18px;
-    overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-    border: 1px solid #e2e8f0;
-}
-.group-header {
-    padding: 10px 16px;
-    font-weight: 800;
-    color: white;
-    text-align: center;
-    font-size: 1rem;
-    letter-spacing: 0.5px;
-}
-
-.match-row {
-    padding: 12px 10px;
-    border-bottom: 1px solid #f1f5f9;
-}
-.match-row:last-child { border-bottom: none; }
-
-.teams-display {
+  /* --- TOP BAR (Weather & Time) --- */
+  .top-bar {
+    width: 100%;
+    max-width: 800px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-.team-name { flex: 1; line-height: 1.2; }
-.team-left { text-align: left; color: #1e40af; }
-.team-right { text-align: right; color: #be123c; }
-.vs { margin: 0 6px; font-size: 0.75rem; color: #94a3b8; font-weight: 700; }
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    padding: 10px 20px;
+    border-radius: 50px;
+    margin-bottom: 30px;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    animation: slideDown 0.8s ease-out;
+  }
 
-.inputs-wrapper {
+  .info-item {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 8px;
-    margin-bottom: 8px;
-}
-.score-in {
-    width: 38px;
-    height: 36px;
-    font-size: 1.1rem;
-    font-weight: 800;
-    text-align: center;
-    border: 2px solid #cbd5e1;
-    border-radius: 8px;
-    background: #f8fafc;
-    transition: all 0.2s;
-}
-.score-in:focus {
-    outline: none;
-    border-color: #3b82f6;
-    background: #eff6ff;
-    box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
-}
-.score-in.filled { border-color: #10b981; background: #ecfdf5; }
-
-.score-sep { font-weight: 800; color: #64748b; }
-
-.save-btn {
-    width: 100%;
-    padding: 9px;
-    border: none;
-    border-radius: 8px;
-    background: #10b981;
-    color: white;
-    font-size: 0.85rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-}
-.save-btn:hover { background: #059669; }
-.save-btn:active { transform: scale(0.98); }
-.save-btn.saving { background: #94a3b8; pointer-events: none; }
-.save-btn.saved { background: #3b82f6; }
-
-.status-text {
-    text-align: center;
-    font-size: 0.72rem;
-    color: #64748b;
-    margin-top: 6px;
-    min-height: 16px;
-}
-
-.toast {
-    position: fixed;
-    bottom: 20px;
-    left: 16px;
-    right: 16px;
-    background: #0f172a;
-    color: white;
-    padding: 12px 16px;
-    border-radius: 10px;
-    font-size: 0.88rem;
     font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .info-item i {
+    color: #ffd700;
+  }
+
+  /* --- TITLE SECTION --- */
+  .title-box {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 40px 30px;
+    margin-bottom: 50px;
     text-align: center;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-    opacity: 0;
-    transform: translateY(15px);
-    transition: all 0.25s ease;
-    z-index: 9999;
-    pointer-events: none;
-}
-.toast.show { opacity: 1; transform: translateY(0); }
-.toast.success { background: #059669; }
-.toast.error { background: #dc2626; }
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    width: 100%;
+    max-width: 800px;
+    box-sizing: border-box;
+    animation: fadeIn 1s ease-out;
+  }
 
-.loading { text-align: center; padding: 30px 16px; color: #64748b; }
-.spinner {
-    width: 28px; height: 28px;
-    border: 3px solid #e2e8f0;
-    border-top-color: #3b82f6;
-    border-radius: 50%;
-    margin: 0 auto 10px;
-    animation: spin 0.8s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
+  /* Gradient Text Effect */
+  .gradient-text {
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 1.2;
+    margin: 0;
+    
+    /* The Magic Gradient */
+    background: linear-gradient(
+      to right, 
+      #00c6ff, 
+      #0072ff, 
+      #00c6ff
+    );
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    
+    animation: shine 4s linear infinite;
+    filter: drop-shadow(0 0 10px rgba(0, 198, 255, 0.3));
+  }
 
-@media (max-width: 400px) {
-    .teams-display { font-size: 0.82rem; }
-    .score-in { width: 34px; height: 34px; font-size: 1rem; }
-}
+  .sub-title {
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    margin-top: 15px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    color: #e0e0e0;
+  }
+
+  .date-badge {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 8px 20px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 30px;
+    font-weight: bold;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  /* --- GRID CONTAINER --- */
+  .container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    width: 100%;
+    max-width: 900px;
+    margin-bottom: 50px;
+  }
+
+  .item {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    text-decoration: none; /* No underline */
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+    border-color: rgba(255,255,255,0.4);
+    background: rgba(40, 40, 60, 0.85);
+  }
+
+  .item img {
+    width: 100%;
+    height: 220px;
+    object-fit: contain; /* Keeps aspect ratio of 48.png and 52.png intact */
+    border-radius: 15px;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+    transition: transform 0.3s;
+  }
+
+  .item:hover img {
+    transform: scale(1.05);
+  }
+
+  .label {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-top: 10px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  }
+
+  /* --- FOOTER LINK --- */
+  .footer-link {
+    margin-top: auto;
+    padding-bottom: 20px;
+  }
+
+  .btn-facebook {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #1877f2;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-decoration: none; /* Explicitly no underline */
+    box-shadow: 0 4px 15px rgba(24, 119, 242, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .btn-facebook:hover {
+    background: #0f5fd1;
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(24, 119, 242, 0.6);
+  }
+
+  /* Animations */
+  @keyframes shine {
+    to {
+      background-position: 200% center;
+    }
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .top-bar {
+      flex-direction: column;
+      gap: 10px;
+      border-radius: 20px;
+    }
+    .container {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
+
 </head>
 <body>
 
-<div class="header">
-    <h1>🏓 Nhập Điểm Thi Đấu</h1>
-    <p>Cập nhật kết quả trực tiếp</p>
+<!-- TOP BAR: Weather & Time -->
+<div class="top-bar">
+  <div class="info-item">
+    <i class="fas fa-clock"></i>
+    <span id="clock">00:00:00</span>
+  </div>
+  <div class="info-item">
+    <i class="fas fa-cloud-sun"></i>
+    <span id="weather">Đức Trọng: <span id="temp-display">--°C</span></span>
+  </div>
 </div>
 
-<div class="container" id="app"></div>
-<div class="toast" id="toast"></div>
+<!-- MAIN TITLE -->
+<div class="title-box">
+  <h1 class="gradient-text">HOÀNG QUỐC VIỆT<br>PICKLEBALL</h1>
+  <div class="sub-title">PICKLEBALL CUP</div>
+  <div class="date-badge">
+    <i class="far fa-calendar-alt"></i> 02/05/2026
+  </div>
+</div>
+
+<!-- GRID CONTENT -->
+<div class="container">
+
+  <!-- Item 1 -->
+  <a href="https://ductrong49.github.io/ritapickleball/hqv_4.2.html" class="item">
+    <!-- Using 48.png as requested (assuming it's in the same folder) -->
+    <img src="48.png" alt="Giải đấu trình 4.2" onerror="this.src='https://via.placeholder.com/300x300?text=4.2+Tournament'">
+    <div class="label">Giải đấu trình 4.2</div>
+  </a>
+
+  <!-- Item 2 -->
+  <a href="https://ductrong49.github.io/ritapickleball/hqv_5.2.html" class="item">
+    <!-- Using 52.png as requested -->
+    <img src="52.PNG" alt="Giải đấu trình 5.2" onerror="this.src='https://via.placeholder.com/300x300?text=5.2+Tournament'">
+    <div class="label">Giải đấu trình 5.2</div>
+  </a>
+
+</div>
+
+<!-- FOOTER LINK -->
+<div class="footer-link">
+  <a href="https://www.facebook.com/share/g/18JyDiVbt4/?mibextid=wwXIfr" class="btn-facebook" target="_blank">
+    <i class="fab fa-facebook-f"></i>
+    TRANG CỘNG ĐỒNG PICKLEBALL
+  </a>
+</div>
 
 <script>
-const SHEET_ID = "1nb9q4tDya5jYbXOwLowxu1XH3-HHcPnCP4kNKXaymLI";
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbykQOvD-swl0yZ5Wq92c4PVXrP0A49dvgU1rkOUt8IUR_2Yaiv8CAVZWaXqUBvIVxi8hg/exec";
+  // 1. Real-time Clock
+  function updateClock() {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('vi-VN', { hour12: false });
+    document.getElementById('clock').textContent = timeString;
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
 
-const GROUPS = [
-  { name: "A", color: "#2563eb", range: "B2:D8", saveStart: 3 },
-  { name: "B", color: "#dc2626", range: "B11:D17", saveStart: 12 },
-  { name: "C", color: "#059669", range: "B20:D26", saveStart: 21 },
-  { name: "D", color: "#d97706", range: "B29:D35", saveStart: 30 }
-];
-
-function showToast(msg, type) {
-    const t = document.getElementById("toast");
-    t.textContent = msg;
-    t.className = `toast ${type || "success"} show`;
-    setTimeout(() => t.classList.remove("show"), 2200);
-}
-
-async function fetchGroup(range) {
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=bang&range=${encodeURIComponent(range)}`;
-    const res = await fetch(url);
-    const txt = await res.text();
-    const json = JSON.parse(txt.substring(txt.indexOf("{"), txt.lastIndexOf("}") + 1));
-    return json.table.rows;
-}
-
-function renderMatch(rowData, saveRow, groupName, groupColor) {
-    const c = rowData.c;
-    const t1 = (c[0] ? (c[0].f || c[0].v || "") : "");
-    const t2 = (c[1] ? (c[1].f || c[1].v || "") : "");
-    const current = (c[2] ? String(c[2].v || "") : "");
-
-    let v1 = "", v2 = "";
-    if (current && current.includes("-")) {
-        const parts = current.split("-");
-        v1 = parts[0] || "";
-        v2 = parts[1] || "";
-    }
-
-    return `
-    <div class="match-row" data-row="${saveRow}">
-        <div class="teams-display">
-            <span class="team-name team-left">${t1}</span>
-            <span class="vs">VS</span>
-            <span class="team-name team-right">${t2}</span>
-        </div>
-        <div class="inputs-wrapper">
-            <input type="tel" data-row="${saveRow}" data-side="1" class="score-in ${v1?'filled':''}" value="${v1}" maxlength="2" inputmode="numeric" placeholder="0">
-            <span class="score-sep">-</span>
-            <input type="tel" data-row="${saveRow}" data-side="2" class="score-in ${v2?'filled':''}" value="${v2}" maxlength="2" inputmode="numeric" placeholder="0">
-        </div>
-        <button class="save-btn" onclick="handleSave(${saveRow}, '${groupName}')">
-            💾 Lưu Bảng ${groupName}
-        </button>
-        ${current ? `<div class="status-text">Điểm hiện tại: <span style="color:${groupColor};font-weight:700">${current}</span></div>` : ''}
-    </div>`;
-}
-
-window.handleSave = async function(row, groupName) {
-    const el1 = document.querySelector(`input[data-row="${row}"][data-side="1"]`);
-    const el2 = document.querySelector(`input[data-row="${row}"][data-side="2"]`);
-    const btn = document.querySelector(`.match-row[data-row="${row}"] .save-btn`);
-
-    const v1 = el1.value.trim();
-    const v2 = el2.value.trim();
-
-    if (!v1 || !v2) {
-        showToast("⚠️ Vui lòng nhập đủ 2 điểm!", "error");
-        return;
-    }
-
-    const scoreVal = `${v1}-${v2}`;
-
-    btn.classList.add("saving");
-    btn.innerHTML = "⏳ Đang lưu...";
-
-    try {
-        await fetch(SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "text/plain" },
-            body: JSON.stringify({ range: `D${row}`, value: scoreVal })
-        });
-
-        el1.classList.add("filled");
-        el2.classList.add("filled");
-
-        btn.classList.remove("saving");
-        btn.classList.add("saved");
-        btn.innerHTML = "✅ Đã lưu D" + row;
-
-        // Update status text
-        let statusEl = btn.nextElementSibling;
-        if (!statusEl || !statusEl.classList.contains("status-text")) {
-            const div = document.createElement("div");
-            div.className = "status-text";
-            btn.parentNode.appendChild(div);
-            statusEl = div;
-        }
-        statusEl.innerHTML = `Đã lưu: <span style="font-weight:700">${scoreVal}</span>`;
-
-        showToast(`✅ Lưu thành công ${scoreVal} → D${row}`, "success");
-
-        setTimeout(() => {
-            btn.classList.remove("saved");
-            btn.innerHTML = `💾 Lưu Bảng ${groupName}`;
-        }, 1500);
-
-    } catch(err) {
-        btn.classList.remove("saving");
-        btn.innerHTML = "❌ Lỗi kết nối";
-        showToast("❌ Không thể lưu dữ liệu", "error");
-    }
-};
-
-async function init() {
-    const app = document.getElementById("app");
-    app.innerHTML = '<div class="loading"><div class="spinner"></div>Đang tải dữ liệu...</div>';
-
-    try {
-        const promises = GROUPS.map(g => fetchGroup(g.range));
-        const results = await Promise.all(promises);
-
-        app.innerHTML = "";
-
-        GROUPS.forEach((cfg, i) => {
-            const rows = results[i];
-            // Skip header (index 0). Indices 1-6 are matches for rows 3-8, 12-17, etc.
-            let html = `<div class="group-card"><div class="group-header" style="background:${cfg.color}">BẢNG ${cfg.name}</div>`;
-            
-            for (let j = 1; j <= 6 && j < rows.length; j++) {
-                const saveRow = cfg.saveStart + (j - 1);
-                html += renderMatch(rows[j], saveRow, cfg.name, cfg.color);
-            }
-            html += `</div>`;
-            app.innerHTML += html;
-        });
-
-    } catch(err) {
-        app.innerHTML = `<div class="loading" style="color:#dc2626">❌ Lỗi tải dữ liệu<br>${err.message}</div>`;
-    }
-}
-
-init();
+  // 2. Weather Simulation for Duc Trong, Lam Dong
+  // Note: Real weather APIs require a backend or API key exposure. 
+  // This script simulates a realistic temperature for Duc Trong (highland climate).
+  function simulateWeather() {
+    // Typical temp in Duc Trong ranges 18-24°C
+    const baseTemp = 22; 
+    const variation = Math.floor(Math.random() * 5) - 2; // -2 to +2
+    const currentTemp = baseTemp + variation;
+    
+    document.getElementById('temp-display').textContent = `${currentTemp}°C`;
+  }
+  
+  // Initialize weather on load
+  window.addEventListener('load', simulateWeather);
 </script>
+
 </body>
 </html>
 
