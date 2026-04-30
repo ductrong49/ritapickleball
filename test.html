@@ -1,354 +1,461 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>HOÀNG QUỐC VIỆT PICKLEBALL</title>
-
-<!-- Font: Oswald for sports look -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
-
-<style>
-  :root {
-    --primary-color: #00f2ff; /* Cyan Neon */
-    --secondary-color: #ccff00; /* Lime Green */
-    --bg-dark: #0a0a0a;
-    --glass-bg: rgba(20, 20, 25, 0.85);
-    --text-gradient: linear-gradient(90deg, #ffffff, #00f2ff);
-  }
-
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Oswald', sans-serif;
-    background-color: var(--bg-dark);
-    background-image: url('https://image.qwenlm.ai/public_source/4a049a49-0398-4b5b-93ea-9691e7b8a93e/16bfa2e7b-4d27-460a-835b-ffc3d74c517a.png'); /* Generated Sports BG */
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    color: white;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow-x: hidden;
-  }
-
-  /* Overlay to darken background for readability */
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: radial-gradient(circle at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.8) 100%);
-    z-index: -1;
-  }
-
-  /* TOP BAR: Weather & Time */
-  .top-bar {
-    width: 100%;
-    max-width: 480px;
-    padding: 15px 20px;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  .weather-widget {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    color: #ddd;
-    text-shadow: 0 1px 2px black;
-  }
-
-  .time-widget {
-    font-weight: 700;
-    font-size: 18px;
-    color: var(--primary-color);
-    letter-spacing: 1px;
-    text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
-  }
-
-  /* MAIN CONTAINER */
-  .main-wrapper {
-    width: 100%;
-    max-width: 480px;
-    padding: 20px;
-    box-sizing: border-box;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  /* TITLE SECTION */
-  .title-box {
-    text-align: center;
-    margin-bottom: 40px;
-    animation: slideDown 0.8s ease-out;
-  }
-
-  .main-title {
-    font-size: 32px;
-    font-weight: 700;
-    text-transform: uppercase;
-    margin: 0;
-    background: var(--text-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
-    line-height: 1.1;
-  }
-
-  .sub-title {
-    font-size: 20px;
-    color: var(--secondary-color);
-    font-weight: 600;
-    margin-top: 5px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-  }
-
-  .date-badge {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 5px 15px;
-    border: 1px solid var(--primary-color);
-    border-radius: 20px;
-    font-size: 14px;
-    color: white;
-    background: rgba(0, 242, 255, 0.1);
-    backdrop-filter: blur(5px);
-  }
-
-  /* IMAGE GRID */
-  .card-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    width: 100%;
-  }
-
-  .card-item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-decoration: none; /* No underline */
-    group: hover;
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-
-  .card-item:hover {
-    transform: translateY(-10px);
-  }
-
-  .img-wrapper {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    border-radius: 15px;
-    overflow: hidden;
-    border: 2px solid rgba(255,255,255,0.1);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    background: #1a1a1a;
-  }
-
-  .card-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    transition: opacity 0.3s;
-  }
-
-  .card-item:hover .img-wrapper {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
-  }
-
-  .card-label {
-    margin-top: 15px;
-    font-size: 18px;
-    font-weight: 600;
-    color: white;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    text-shadow: 0 2px 4px black;
-    position: relative;
-  }
-
-  .card-label::after {
-    content: '';
-    display: block;
-    width: 0%;
-    height: 2px;
-    background: var(--secondary-color);
-    margin: 5px auto 0;
-    transition: width 0.3s;
-  }
-
-  .card-item:hover .card-label::after {
-    width: 100%;
-  }
-
-  /* FOOTER LINK */
-  .footer-link {
-    margin-top: 50px;
-    text-align: center;
-    animation: fadeInUp 1s ease-out;
-  }
-
-  .btn-facebook {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    background: linear-gradient(45deg, #1877f2, #005bea);
-    color: white;
-    padding: 15px 30px;
-    border-radius: 50px;
-    font-weight: bold;
-    font-size: 16px;
-    text-decoration: none;
-    box-shadow: 0 4px 15px rgba(24, 119, 242, 0.4);
-    transition: all 0.3s;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .btn-facebook:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(24, 119, 242, 0.6);
-    background: linear-gradient(45deg, #005bea, #1877f2);
-  }
-
-  /* Animations */
-  @keyframes slideDown {
-    from { transform: translateY(-50px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-
-  @keyframes fadeInUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-
-  /* Responsive adjustments */
-  @media (max-width: 350px) {
-    .main-title { font-size: 26px; }
-    .card-label { font-size: 16px; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROBIN ROUND PICKLEBALL</title>
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/roboto@5.1.0/index.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00e676;
+            --primary-dk: #00c853;
+            --accent: #ffd600;
+            --bg-dark: #0a0e17;
+            --bg-card: #111827;
+            --bg-hover: #1a2332;
+            --text-main: #ffffff;
+            --text-sub: #94a3b8;
+            --border: #1e293b;
+            --grad-green: linear-gradient(135deg, #00c853, #00e676, #69f0ae);
+            --grad-gold: linear-gradient(135deg, #ffd600, #ffab00);
+            --shadow: 0 0 30px rgba(0, 230, 118, 0.12);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(180deg, #0a0e17 0%, #0d1520 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .bg-fx { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+        .bg-fx::before {
+            content: ''; position: absolute; top: -10%; left: -10%; width: 50%; height: 50%;
+            background: radial-gradient(circle, rgba(0, 200, 83, 0.06) 0%, transparent 70%);
+            animation: f1 20s ease-in-out infinite;
+        }
+        .bg-fx::after {
+            content: ''; position: absolute; bottom: -10%; right: -10%; width: 50%; height: 50%;
+            background: radial-gradient(circle, rgba(255, 214, 0, 0.04) 0%, transparent 70%);
+            animation: f2 25s ease-in-out infinite;
+        }
+        @keyframes f1 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(40px, 30px); } }
+        @keyframes f2 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-50px, -40px); } }
+        .container { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 20px 40px; }
+        header { padding: 30px 0 20px; text-align: center; position: relative; }
+        header::after {
+            content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 60%; height: 2px; background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+        .logo-box { display: inline-flex; align-items: center; gap: 16px; margin-bottom: 10px; }
+        .ball {
+            width: 64px; height: 64px; background: var(--grad-green); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 30px rgba(0, 200, 83, 0.35); animation: pulse 2.5s infinite;
+        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(0, 200, 83, 0.3); } 50% { transform: scale(1.05); box-shadow: 0 0 50px rgba(0, 200, 83, 0.5); } }
+        .ball svg { width: 36px; height: 36px; fill: #0a0e17; }
+        h1 {
+            font-size: 2.4rem; font-weight: 900; background: var(--grad-green);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase; letter-spacing: 2px; line-height: 1.1;
+        }
+        .sub { font-size: 0.8rem; color: var(--text-sub); letter-spacing: 5px; text-transform: uppercase; margin-top: 5px; }
+        .nav { display: flex; justify-content: center; gap: 12px; margin: 25px 0 20px; flex-wrap: wrap; }
+        .btn {
+            padding: 12px 28px; border: 2px solid var(--border); background: var(--bg-card);
+            color: var(--text-sub); font-size: 0.9rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 2px; cursor: pointer; border-radius: 12px; transition: all 0.3s;
+        }
+        .btn:hover { border-color: var(--primary); color: var(--text-main); transform: translateY(-2px); }
+        .btn.on { background: var(--grad-green); border-color: transparent; color: var(--bg-dark); box-shadow: 0 8px 25px rgba(0, 200, 83, 0.25); transform: translateY(-2px); }
+        .panel { display: none; animation: up 0.4s ease; }
+        .panel.on { display: block; }
+        @keyframes up { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+        .ttl { font-size: 1.3rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
+        .ttl i { display: inline-block; width: 34px; height: 34px; background: var(--grad-gold); border-radius: 8px; text-align: center; line-height: 34px; font-size: 1.1rem; font-style: normal; }
+        .upd { font-size: 0.75rem; color: var(--text-sub); font-style: italic; }
+        .box { background: var(--bg-card); border-radius: 14px; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow); }
+        .wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        table th {
+            background: linear-gradient(135deg, #1a2332, #0d1520); padding: 13px 16px;
+            text-align: center; font-weight: 700; text-transform: uppercase; font-size: 0.75rem;
+            color: var(--primary); border-bottom: 2px solid var(--primary); white-space: nowrap;
+        }
+        table tr { border-bottom: 1px solid rgba(30, 41, 59, 0.5); transition: background 0.2s; }
+        table tr:hover { background: var(--bg-hover); }
+        table td { padding: 11px 16px; text-align: center; font-size: 0.88rem; color: var(--text-main); white-space: nowrap; }
+        .rk {
+            display: inline-flex; width: 30px; height: 30px; border-radius: 50%;
+            align-items: center; justify-content: center; font-weight: 800; font-size: 0.78rem;
+        }
+        .rk-1 { background: var(--grad-gold); color: #000; box-shadow: 0 0 15px rgba(255, 214, 0, 0.3); }
+        .rk-2 { background: linear-gradient(135deg, #b0bec5, #90a4ae); color: #000; }
+        .rk-3 { background: linear-gradient(135deg, #cd7f32, #a0522d); color: #fff; }
+        .rk-d { background: var(--bg-hover); color: var(--text-sub); border: 1px solid var(--border); }
+        .pod { display: flex; justify-content: center; align-items: flex-end; gap: 10px; margin-bottom: 20px; padding: 10px 0; }
+        .pi {
+            text-align: center; padding: 12px; border-radius: 12px 12px 0 0; background: var(--bg-card);
+            border: 1px solid var(--border); min-width: 80px; transition: transform 0.3s;
+        }
+        .pi:hover { transform: translateY(-3px); }
+        .p1 { height: 130px; background: linear-gradient(180deg, rgba(255, 214, 0, 0.08), var(--bg-card)); border-color: rgba(255, 214, 0, 0.25); order: 2; }
+        .p2 { height: 105px; background: linear-gradient(180deg, rgba(176, 190, 197, 0.06), var(--bg-card)); border-color: rgba(176, 190, 197, 0.2); order: 1; }
+        .p3 { height: 90px; background: linear-gradient(180deg, rgba(205, 127, 50, 0.06), var(--bg-card)); border-color: rgba(205, 127, 50, 0.2); order: 3; }
+        .pe { font-size: 1.4rem; }
+        .pn { font-weight: 800; font-size: 0.85rem; margin-bottom: 2px; }
+        .pv { font-size: 0.72rem; color: var(--text-sub); }
+        .mc { background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 12px; transition: all 0.3s; }
+        .mc:hover { border-color: rgba(0, 230, 118, 0.3); box-shadow: var(--shadow); transform: translateY(-2px); }
+        .mt { background: linear-gradient(135deg, #1a2332, #0d1520); padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--primary); }
+        .md { font-size: 0.8rem; color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .mr { background: var(--grad-gold); color: var(--bg-dark); padding: 2px 10px; border-radius: 15px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
+        .mb { padding: 16px; display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap; }
+        .tm { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 130px; }
+        .tr { flex-direction: row-reverse; text-align: right; }
+        .td { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; flex-shrink: 0; }
+        .th { background: linear-gradient(135deg, #1565c0, #42a5f5); }
+        .ta { background: linear-gradient(135deg, #c62828, #ef5350); }
+        .tn { font-weight: 700; font-size: 0.92rem; }
+        .ts { font-size: 0.72rem; color: var(--text-sub); }
+        .team-pts {
+            display: inline-flex; align-items: center; gap: 4px;
+            background: linear-gradient(135deg, rgba(255, 214, 0, 0.15), rgba(255, 171, 0, 0.08));
+            border: 1px solid rgba(255, 214, 0, 0.3);
+            padding: 2px 8px; border-radius: 10px; margin-top: 4px;
+            font-size: 0.72rem; color: var(--accent); font-weight: 700;
+        }
+        .vs { background: var(--grad-green); color: var(--bg-dark); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.75rem; flex-shrink: 0; }
+        .mx { padding: 0 16px 12px; display: flex; gap: 16px; flex-wrap: wrap; }
+        .mi { display: flex; align-items: center; gap: 5px; font-size: 0.8rem; color: var(--text-sub); }
+        .ld { display: flex; flex-direction: column; align-items: center; padding: 40px; gap: 15px; }
+        .sp { width: 38px; height: 38px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.7s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .lt { color: var(--text-sub); font-size: 0.82rem; }
+        .er { text-align: center; padding: 30px; color: #ff5252; }
+        .er i { font-size: 2rem; font-style: normal; display: block; margin-bottom: 8px; }
+        footer { text-align: center; padding: 20px 0 5px; border-top: 1px solid var(--border); color: var(--text-sub); font-size: 0.78rem; margin-top: 30px; }
+        footer b { color: var(--primary); }
+    </style>
 </head>
 <body>
+    <div class="bg-fx"></div>
+    <div class="container">
+        <header>
+            <div class="logo-box">
+                <div class="ball">
+                    <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="#0a0e17" stroke-width="2.5"/><circle cx="32" cy="32" r="7" fill="#0a0e17" opacity="0.7"/><line x1="32" y1="6" x2="32" y2="25" stroke="#0a0e17" stroke-width="2"/><line x1="32" y1="39" x2="32" y2="58" stroke="#0a0e17" stroke-width="2"/><line x1="6" y1="32" x2="25" y2="32" stroke="#0a0e17" stroke-width="2"/><line x1="39" y1="32" x2="58" y2="32" stroke="#0a0e17" stroke-width="2"/></svg>
+                </div>
+                <div>
+                    <h1>Robin Round<br>Pickleball</h1>
+                    <div class="sub">Season 2026</div>
+                </div>
+            </div>
+        </header>
+        <nav class="nav">
+            <button class="btn on" data-t="tab1">🏆 Bảng Xếp Hạng</button>
+            <button class="btn" data-t="tab2">📅 Lịch Đấu</button>
+        </nav>
+        <section id="tab1" class="panel on">
+            <div class="head">
+                <div class="ttl"><i>🏆</i>Bảng Xếp Hạng</div>
+                <div class="upd" id="ur"></div>
+            </div>
+            <div id="cr"><div class="ld"><div class="sp"></div><div class="lt">Đang tải bảng xếp hạng...</div></div></div>
+        </section>
+        <section id="tab2" class="panel">
+            <div class="head">
+                <div class="ttl"><i>📅</i>Lịch Đấu Đội</div>
+                <div class="upd" id="us"></div>
+            </div>
+            <div id="cs"><div class="ld"><div class="sp"></div><div class="lt">Đang tải lịch đấu...</div></div></div>
+        </section>
+        <footer>© 2026 <b>ROBIN ROUND PICKLEBALL</b> — Designed for Champions 🏆</footer>
+    </div>
 
-<!-- TOP BAR: Weather & Time -->
-<div class="top-bar">
-  <div class="weather-widget" id="weather-display">
-    <span id="weather-icon">☁️</span>
-    <span id="weather-temp">--°C</span>
-    <span style="font-size:12px; opacity:0.8;">Đức Trọng</span>
-  </div>
-  <div class="time-widget" id="clock-display">
-    00:00
-  </div>
-</div>
+    <script>
+        const SID = '1cDNrI43tQApk12oOB_SjQ6aPMcGbd18ToDqWLlfhD-c';
+        const GVIZ = `https://docs.google.com/spreadsheets/d/${SID}/gviz/tq?tqx=out:csv`;
+        let teamScoreMap = {};
+        let teamRankMap = {};
 
-<div class="main-wrapper">
-  
-  <!-- TITLE -->
-  <div class="title-box">
-    <h1 class="main-title">HOÀNG QUỐC VIỆT<br>PICKLEBALL</h1>
-    <div class="sub-title">PICKLEBALL CUP</div>
-    <div class="date-badge">02/05/2026</div>
-  </div>
+        document.querySelectorAll('.btn').forEach(b => b.addEventListener('click', () => {
+            document.querySelectorAll('.btn').forEach(x => x.classList.remove('on'));
+            document.querySelectorAll('.panel').forEach(x => x.classList.remove('on'));
+            b.classList.add('on');
+            document.getElementById(b.dataset.t).classList.add('on');
+        }));
 
-  <!-- 2 IMAGES SIDE BY SIDE -->
-  <div class="card-container">
+        async function fetchData(sheet, range) {
+            const u = `${GVIZ}&sheet=${encodeURIComponent(sheet)}&range=${encodeURIComponent(range)}`;
+            const res = await fetch(u);
+            if (!res.ok) throw new Error(res.status);
+            return parseCSV(await res.text());
+        }
 
-    <!-- Item 1: 48.png -->
-    <a href="https://ductrong49.github.io/ritapickleball/hqv_4.2.html" class="card-item">
-      <div class="img-wrapper">
-        <img src="doinu.png" alt="Giải đấu 4.2" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=4.2'">
-      </div>
-      <div class="card-label">Giải Đấu 4.2</div>
-    </a>
+        function parseCSV(raw) {
+            const R = []; let cell = '', q = false, row = [];
+            for (let i = 0; i < raw.length; i++) {
+                const ch = raw[i], nx = raw[i + 1];
+                if (q) {
+                    if (ch === '"' && nx === '"') { cell += '"'; i++; }
+                    else if (ch === '"') q = false;
+                    else cell += ch;
+                } else {
+                    if (ch === '"') q = true;
+                    else if (ch === ',') { row.push(cell.trim()); cell = ''; }
+                    else if (ch === '\n' || ch === '\r') {
+                        if (ch === '\r' && nx === '\n') i++;
+                        row.push(cell.trim());
+                        if (row.some(v => v !== '')) R.push(row);
+                        row = []; cell = '';
+                    } else cell += ch;
+                }
+            }
+            if (cell || row.length) { row.push(cell.trim()); if (row.some(v => v !== '')) R.push(row); }
+            return R;
+        }
 
-    <!-- Item 2: 52.png -->
-    <a href="https://ductrong49.github.io/ritapickleball/hqv_5.2.html" class="card-item">
-      <div class="img-wrapper">
-        <img src="52.PNG" alt="Giải đấu 5.2" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=5.2'">
-      </div>
-      <div class="card-label">Giải Đấu 5.2</div>
-    </a>
+        // Build maps: team name -> score, team name -> rank
+        function buildMaps(data) {
+            teamScoreMap = {};
+            teamRankMap = {};
+            if (!data || data.length === 0) return;
+            const dr = data.filter(r => r.some(v => v !== ''));
+            if (dr.length === 0) return;
 
-  </div>
+            let bodyRows = dr;
+            // Check if first row is header
+            const fr = dr[0];
+            if (fr.some(v => isNaN(parseFloat(v)) && v && !v.match(/^\d/))) {
+                bodyRows = dr.slice(1);
+            }
 
-  
+            // For K1:L9, we have 2 columns per row
+            // Try to figure out which is name and which is score
+            bodyRows.forEach((row, idx) => {
+                if (row.length < 2) return;
+                let nameCell = '', scoreCell = '';
 
-<script>
-  // 1. Clock Functionality
-  function updateClock() {
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    document.getElementById('clock-display').textContent = `${hours}:${minutes}`;
-  }
-  setInterval(updateClock, 1000);
-  updateClock();
+                // Column 0 could be rank or name, Column 1 could be name or score
+                // Strategy: find the text cell and the number cell
+                for (let c = 0; c < row.length; c++) {
+                    const v = row[c];
+                    const num = parseFloat(v.replace(/[,.]/g, (m, o, s) => {
+                        // Handle Vietnamese number format
+                        return m;
+                    }));
 
-  // 2. Weather Simulation for Duc Trong, Lam Dong
-  // Note: Real-time weather requires an API Key (OpenWeatherMap etc). 
-  // Since this is a static frontend demo without backend proxy, we simulate realistic data for Duc Trong.
-  // Duc Trong is typically mild/cool.
-  
-  function getSimulatedWeather() {
-    const hour = new Date().getHours();
-    let temp = 22; // Base temp
-    let condition = "Mát mẻ";
-    let icon = "☁️";
+                    if (!isNaN(num) && v.match(/[\d]/) && v.length < 20) {
+                        scoreCell = v;
+                    } else if (v.length > 0) {
+                        nameCell = v;
+                    }
+                }
 
-    // Simple logic: Warmer during day (11am - 2pm), cooler at night
-    if (hour >= 11 && hour <= 14) {
-      temp = 26;
-      condition = "Nắng nhẹ";
-      icon = "⛅";
-    } else if (hour >= 15 && hour <= 18) {
-      temp = 24;
-      condition = "Có mây";
-      icon = "🌤️";
-    } else if (hour >= 19 || hour <= 6) {
-      temp = 19;
-      condition = "Se lạnh";
-      icon = "🌙";
-    }
+                // If column 0 is numeric (rank) and column 1 is name, or vice versa
+                // For 2 columns: if col0 is numeric and col1 is text -> col1=name, col0=rank
+                // If col0 is text and col1 is numeric -> col0=name, col1=score
+                if (!nameCell && !scoreCell) {
+                    // Fallback: treat col 0 as name, col 1 as score
+                    nameCell = row[0];
+                    scoreCell = row[1];
+                }
 
-    // Add slight randomness to make it feel alive on reload
-    const randomVar = Math.floor(Math.random() * 3) - 1; 
-    temp += randomVar;
+                if (nameCell) {
+                    const key = nameCell.trim().toLowerCase();
+                    if (scoreCell) {
+                        teamScoreMap[key] = scoreCell.trim();
+                    }
+                    teamRankMap[key] = (idx + 1);
+                }
+            });
+        }
 
-    return { temp, icon };
-  }
+        function findScore(teamName) {
+            if (!teamName) return '';
+            const key = teamName.trim().toLowerCase();
+            // Direct match
+            if (teamScoreMap[key] !== undefined) return teamScoreMap[key];
+            if (teamRankMap[key] !== undefined) return `Hạng ${teamRankMap[key]}`;
+            // Partial match
+            for (const [k, v] of Object.entries(teamScoreMap)) {
+                if (k.includes(key) || key.includes(k)) return v;
+            }
+            return '';
+        }
 
-  function updateWeather() {
-    const weatherData = getSimulatedWeather();
-    document.getElementById('weather-temp').textContent = `${weatherData.temp}°C`;
-    document.getElementById('weather-icon').textContent = weatherData.icon;
-  }
+        function findRank(teamName) {
+            if (!teamName) return '';
+            const key = teamName.trim().toLowerCase();
+            if (teamRankMap[key] !== undefined) return teamRankMap[key];
+            for (const [k, v] of Object.entries(teamRankMap)) {
+                if (k.includes(key) || key.includes(k)) return v;
+            }
+            return '';
+        }
 
-  // Initialize weather
-  updateWeather();
+        // Render Rankings
+        function renderRankings(data) {
+            const el = document.getElementById('cr');
+            if (!data || data.length === 0) { el.innerHTML = '<div class="er"><i>📭</i>Không có dữ liệu</div>'; return; }
+            const dr = data.filter(r => r.some(v => v !== ''));
+            if (!dr.length) { el.innerHTML = '<div class="er"><i>📭</i>Không có dữ liệu</div>'; return; }
 
-</script>
+            let h = ['Hạng', 'Dữ Liệu'], bodyRows = dr;
+            const fr = dr[0];
+            if (fr.some(v => isNaN(parseFloat(v)) && v && !v.match(/^\d/))) { h = fr; bodyRows = dr.slice(1); }
 
+            // Build lookup maps from ranking data
+            buildMaps(data);
+
+            // Podium
+            let pod = '';
+            if (bodyRows.length >= 3) {
+                const top = [bodyRows[0], bodyRows[1], bodyRows[2]];
+                const order = [{i:1, c:'p2', e:'🥈'}, {i:0, c:'p1', e:'🥇'}, {i:2, c:'p3', e:'🥉'}];
+                pod = '<div class="pod">';
+                order.forEach(x => {
+                    const row = top[x.i];
+                    let nameVal = '', scoreVal = '';
+                    for (let c = 0; c < row.length; c++) {
+                        const v = row[c];
+                        if (isNaN(parseFloat(v)) || !v.match(/^[\d,.]+$/)) { if (!nameVal) nameVal = v; }
+                        else { if (!scoreVal) scoreVal = v; }
+                    }
+                    if (!nameVal) nameVal = row[0] || row[1] || '';
+                    if (!scoreVal) scoreVal = row[1] || row[0] || '';
+                    pod += `<div class="pi ${x.c}"><div class="pe">${x.e}</div><div class="pn">${nameVal}</div><div class="pv">${scoreVal} pts</div></div>`;
+                });
+                pod += '</div>';
+            }
+
+            // Table
+            let tb = '<div class="box"><div class="wrap"><table><thead><tr><th>#</th>';
+            h.forEach(x => tb += `<th>${x}</th>`);
+            tb += '</tr></thead><tbody>';
+            bodyRows.forEach((row, i) => {
+                const rn = i + 1;
+                const rc = rn === 1 ? 'rk-1' : rn === 2 ? 'rk-2' : rn === 3 ? 'rk-3' : 'rk-d';
+                tb += `<tr><td><span class="rk ${rc}">${rn}</span></td>`;
+                row.forEach(v => tb += `<td>${v || '—'}</td>`);
+                tb += '</tr>';
+            });
+            tb += '</tbody></table></div></div>';
+            el.innerHTML = pod + tb;
+            document.getElementById('ur').textContent = `Cập nhật: ${new Date().toLocaleString('vi-VN')}`;
+        }
+
+        // Render Schedule with team scores
+        function renderSchedule(data) {
+            const el = document.getElementById('cs');
+            if (!data || data.length <= 1) { el.innerHTML = '<div class="er"><i>📭</i>Không có dữ liệu</div>'; return; }
+            const h = data[0], bodyRows = data.slice(1).filter(r => r.some(v => v !== ''));
+            if (!bodyRows.length) { el.innerHTML = '<div class="er"><i>📭</i>Không có dữ liệu</div>'; return; }
+
+            const fc = k => h.findIndex(x => x.toLowerCase().includes(k));
+            const cd = fc('ngày') >= 0 ? fc('ngày') : fc('date') >= 0 ? fc('date') : fc('thời') >= 0 ? fc('thời') : 0;
+            const cRd = fc('vòng') >= 0 ? fc('vòng') : fc('round') >= 0 ? fc('round') : -1;
+            const c1 = fc('đội 1') >= 0 ? fc('đội 1') : fc('team 1') >= 0 ? fc('team 1') : fc('nhà') >= 0 ? fc('nhà') : 2;
+            const c2 = fc('đội 2') >= 0 ? fc('đội 2') : fc('team 2') >= 0 ? fc('team 2') : fc('khách') >= 0 ? fc('khách') : 3;
+            const cTm = fc('giờ') >= 0 ? fc('giờ') : fc('time') >= 0 ? fc('time') : -1;
+            const cCt = fc('sân') >= 0 ? fc('sân') : fc('court') >= 0 ? fc('court') : -1;
+            const cSt = fc('trạng') >= 0 ? fc('trạng') : fc('status') >= 0 ? fc('status') : fc('kết') >= 0 ? fc('kết') : -1;
+
+            let cards = '';
+            bodyRows.forEach((row, idx) => {
+                const dt = cd >= 0 ? (row[cd] || '') : '';
+                const rd = cRd >= 0 ? (row[cRd] || '') : '';
+                const t1 = c1 >= 0 ? (row[c1] || 'Đội 1') : 'Đội 1';
+                const t2 = c2 >= 0 ? (row[c2] || 'Đội 2') : 'Đội 2';
+                const tm = cTm >= 0 ? (row[cTm] || '') : '';
+                const ct = cCt >= 0 ? (row[cCt] || '') : '';
+                const st = cSt >= 0 ? (row[cSt] || '') : '';
+
+                let ds = dt;
+                if (dt) { try { const d = new Date(dt); if (!isNaN(d)) ds = d.toLocaleDateString('vi-VN', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' }); } catch(e) {} }
+
+                const i1 = t1.substring(0, 2).toUpperCase();
+                const i2 = t2.substring(0, 2).toUpperCase();
+
+                // Find team scores from rankings
+                const score1 = findScore(t1);
+                const score2 = findScore(t2);
+                const rank1 = findRank(t1);
+                const rank2 = findRank(t2);
+
+                let sh = '';
+                if (st) {
+                    const l = st.toLowerCase();
+                    if (l.includes('xong') || l.includes('hoàn') || l.includes('kết')) sh = '<span style="color:var(--primary);font-weight:700">✅ Đã đấu</span>';
+                    else if (l.includes('hủy')) sh = '<span style="color:#ff5252;font-weight:700">❌ Hủy</span>';
+                    else if (l.includes('đang')) sh = '<span style="color:var(--accent);font-weight:700">🔴 Đang đấu</span>';
+                    else sh = '<span style="color:var(--text-sub)">⏳ Sắp diễn ra</span>';
+                }
+
+                cards += `
+                <div class="mc">
+                    <div class="mt">
+                        <div class="md">${ds || 'Chưa xác định'}</div>
+                        ${rd ? `<div class="mr">${rd}</div>` : ''}
+                    </div>
+                    <div class="mb">
+                        <div class="tm">
+                            <div class="td th">${i1}</div>
+                            <div>
+                                <div class="tn">${t1}</div>
+                                <div class="ts">Đội nhà</div>
+                                ${score1 ? `<div class="team-pts">⭐ ${score1} pts ${rank1 ? `· Hạng ${rank1}` : ''}</div>` : ''}
+                            </div>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="tm tr">
+                            <div class="td ta">${i2}</div>
+                            <div>
+                                <div class="tn">${t2}</div>
+                                <div class="ts">Đội khách</div>
+                                ${score2 ? `<div class="team-pts">⭐ ${score2} pts ${rank2 ? `· Hạng ${rank2}` : ''}</div>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mx">
+                        ${tm ? `<div class="mi">⏰ ${tm}</div>` : ''}
+                        ${ct ? `<div class="mi">🏟️ ${ct}</div>` : ''}
+                        ${st ? `<div class="mi">${sh}</div>` : ''}
+                    </div>
+                </div>`;
+            });
+            el.innerHTML = cards;
+            document.getElementById('us').textContent = `Cập nhật: ${new Date().toLocaleString('vi-VN')}`;
+        }
+
+        async function init() {
+            try {
+                const [rankData, schedData] = await Promise.all([
+                    fetchData('BangXepHang', 'K1:L9'),
+                    fetchData('LichDauDoi', 'A1:G15')
+                ]);
+                renderRankings(rankData);
+                renderSchedule(schedData);
+            } catch (e) {
+                console.error('Error:', e);
+                try {
+                    const [rankData, schedData] = await Promise.all([
+                        fetchData('BangXepHang', ''),
+                        fetchData('LichDauDoi', '')
+                    ]);
+                    renderRankings(rankData);
+                    renderSchedule(schedData);
+                } catch (e2) {
+                    document.getElementById('cr').innerHTML = '<div class="er"><i>⚠️</i>Lỗi kết nối Google Sheets</div>';
+                    document.getElementById('cs').innerHTML = '<div class="er"><i>⚠️</i>Lỗi kết nối Google Sheets</div>';
+                }
+            }
+        }
+        init();
+    </script>
 </body>
 </html>
 
