@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🏓 ROBIN ROUND PICKLEBALL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #00d4aa;
+      --secondary: #1a1a2e;
+      --accent: #ff6b6b;
+      --dark: #0f0f1a;
+      --light: #f8f9fa;
+      --card-bg: rgba(30, 30, 50, 0.9);
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, var(--dark), var(--secondary));
+      color: var(--light);
+      min-height: 100vh;
+      background-attachment: fixed;
+      overflow-x: hidden;
+    }
+    
+    /* Animated background */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(0, 212, 170, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 107, 107, 0.1) 0%, transparent 50%);
+      z-index: -1;
+      animation: pulse 8s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 0.8; }
+    }
+    
+    /* Header */
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: linear-gradient(90deg, var(--secondary), var(--dark), var(--secondary));
+      border-bottom: 3px solid var(--primary);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    header::after {
+      content: "🏓";
+      position: absolute;
+      font-size: 8rem;
+      opacity: 0.1;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    h1 {
+      font-family: 'Orbitron', monospace;
+      font-size: 2.5rem;
+      color: var(--primary);
+      text-shadow: 0 0 20px rgba(0, 212, 170, 0.5);
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .subtitle {
+      color: #aaa;
+      font-size: 1.1rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Tabs Navigation */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1.5rem 1rem;
+      background: rgba(26, 26, 46, 0.8);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 2px solid var(--primary);
+    }
+    
+    .tab-btn {
+      padding: 0.8rem 1.5rem;
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--light);
+      font-family: 'Orbitron', monospace;
+      font-weight: 700;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .tab-btn::before {
+      content: "";
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 212, 170, 0.3), transparent);
+      transition: left 0.5s;
+    }
+    
+    .tab-btn:hover::before { left: 100%; }
+    
+    .tab-btn.active, .tab-btn:hover {
+      background: var(--primary);
+      color: var(--dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(0, 212, 170, 0.4);
+    }
+    
+    /* Tab Content */
+    .tab-content {
+      display: none;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      animation: fadeIn 0.4s ease;
+    }
+    
+    .tab-content.active { display: block; }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Tables */
+    .table-container {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 212, 170, 0.3);
+      overflow-x: auto;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+    
+    th {
+      background: linear-gradient(135deg, var(--primary), #00a885);
+      color: var(--dark);
+      font-family: 'Orbitron', monospace;
+      padding: 1rem;
+      text-align: center;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    td {
+      padding: 1rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transition: background 0.2s;
+    }
+    
+    tr:hover td {
+      background: rgba(0, 212, 170, 0.1);
+    }
+    
+    tr:last-child td { border-bottom: none; }
+    
+    .rank {
+      font-family: 'Orbitron', monospace;
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    
+    .rank-1 { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+    .rank-2 { color: #c0c0c0; }
+    .rank-3 { color: #cd7f32; }
+    
+    /* Match Cards */
+    .matches-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .match-card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 1.5rem;
+      border-left: 4px solid var(--accent);
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: 1px solid rgba(255, 107, 107, 0.3);
+    }
+    
+    .match-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(255, 107, 107, 0.2);
+    }
+    
+    .match-time {
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .match-players {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 1rem 0;
+      font-weight: 500;
+    }
+    
+    .vs {
+      background: var(--accent);
+      color: white;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+    
+    .match-court {
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+    
+    /* Stats Tab */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: 15px;
+      text-align: center;
+      border: 1px solid rgba(0, 212, 170, 0.3);
+    }
+    
+    .stat-value {
+      font-family: 'Orbitron', monospace;
+      font-size: 2.5rem;
+      color: var(--primary);
+      font-weight: 700;
+    }
+    
+    .stat-label {
+      color: #aaa;
+      margin-top: 0.5rem;
+    }
+    
+    /* Loading & Empty States */
+    .loading, .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #aaa;
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(0, 212, 170, 0.2);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #666;
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 2rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      h1 { font-size: 1.8rem; }
+      .tabs { flex-wrap: wrap; }
+      .tab-btn { padding: 0.6rem 1rem; font-size: 0.9rem; }
+      .table-container { padding: 1rem; }
+      th, td { padding: 0.8rem 0.5rem; font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🏓 ROBIN ROUND PICKLEBALL</h1>
+    <p class="subtitle">Giải đấu chuyên nghiệp • Cập nhật trực tiếp</p>
+  </header>
+
+  <!-- Tabs Navigation -->
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="ranking">🏆 Bảng Xếp Hạng</button>
+    <button class="tab-btn" data-tab="schedule">📅 Lịch Đấu</button>
+    <button class="tab-btn" data-tab="stats">📊 Thống Kê</button>
+  </nav>
+
+  <!-- Tab 1: Bảng Xếp Hạng -->
+  <section id="ranking" class="tab-content active">
+    <div class="table-container">
+      <table id="rankingTable">
+        <thead>
+          <tr>
+            <th>Hạng</th>
+            <th>Tên VĐV</th>
+            <th>Điểm</th>
+            <th>Trận</th>
+            <th>Thắng</th>
+            <th>Hiệu Số</th>
+          </tr>
+        </thead>
+        <tbody id="rankingBody">
+          <!-- Dữ liệu sẽ được load từ Google Sheet -->
+        </tbody>
+      </table>
+      <div id="rankingLoading" class="loading">
+        <div class="spinner"></div>
+        <p>Đang tải dữ liệu bảng xếp hạng...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tab 2: Lịch Đấu -->
+  <section id="schedule" class="tab-content">
+    <div class="matches-grid" id="matchesContainer">
+      <!-- Match cards sẽ được load từ Google Sheet -->
+    </div>
+    <div id="scheduleLoading" class="loading" style="display:none;">
+      <div class="spinner"></div>
+      <p>Đang tải lịch đấu...</p>
+    </div>
+  </section>
+
+  <!-- Tab 3: Thống Kê -->
+  <section id="stats" class="tab-content">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="totalPlayers">0</div>
+        <div class="stat-label">Vận Động Viên</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="totalMatches">0</div>
+        <div class="stat-label">Trận Đã Đấu</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="upcomingMatches">0</div>
+        <div class="stat-label">Trận Sắp Tới</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">🏓</div>
+        <div class="stat-label">Robin Round Format</div>
+      </div>
+    </div>
+    
+    <div class="table-container">
+      <h3 style="margin-bottom:1rem; color:var(--primary);">📋 Thể Lệ Giải Đấu</h3>
+      <ul style="line-height:1.8; color:#ccc;">
+        <li>• Format: Robin Round (mỗi VĐV đấu với tất cả VĐV khác)</li>
+        <li>• Tính điểm: Thắng = 3 điểm, Hòa = 1 điểm, Thua = 0 điểm</li>
+        <li>• Xếp hạng: Theo tổng điểm → Hiệu số → Đối đầu</li>
+        <li>• Top 4 VĐV vào vòng bán kết</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <p>🏓 ROBIN ROUND PICKLEBALL © 2026 • Dữ liệu cập nhật từ Google Sheets</p>
+    <p style="margin-top:0.5rem; font-size:0.8rem; color:#555;">
+      💡 Để cập nhật dữ liệu: Chỉnh sửa Google Sheet → Dữ liệu web tự động đồng bộ
+    </p>
+  </footer>
+
+  <script>
+    // ===== CONFIG GOOGLE SHEET =====
+    const SHEET_ID = '1cDNrI43tQApk12oOB_SjQ6aPMcGbd18ToDqWLlfhD-c';
+    const SHEETS = {
+      ranking: { gid: '1092175948', range: 'K2:L19', name: 'BangXepHang' },
+      schedule: { gid: '', range: 'A1:G15', name: 'LichDauDoi' } // Cần tìm gid chính xác
+    };
+
+    // ===== TAB SWITCHING =====
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+        
+        // Load data when tab is activated
+        if(btn.dataset.tab === 'ranking') loadRanking();
+        if(btn.dataset.tab === 'schedule') loadSchedule();
+      });
+    });
+
+    // ===== FETCH GOOGLE SHEET DATA (CSV) =====
+    async function fetchSheetCSV(gid, range) {
+      // Lưu ý: Cần publish sheet ở dạng "Anyone with link can view"
+      const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?gid=${gid}&format=csv`;
+      try {
+        const response = await fetch(url);
+        if(!response.ok) throw new Error('Không thể tải dữ liệu');
+        const text = await response.text();
+        return parseCSV(text);
+      } catch(err) {
+        console.error('Lỗi fetch sheet:', err);
+        return null;
+      }
+    }
+
+    function parseCSV(csvText) {
+      const lines = csvText.trim().split('\n');
+      return lines.map(line => {
+        const values = [];
+        let inQuotes = false, current = '';
+        for(let char of line) {
+          if(char === '"') inQuotes = !inQuotes;
+          else if(char === ',' && !inQuotes) {
+            values.push(current.trim());
+            current = '';
+          } else current += char;
+        }
+        values.push(current.trim());
+        return values;
+      });
+    }
+
+    // ===== LOAD RANKING TAB =====
+    async function loadRanking() {
+      const tbody = document.getElementById('rankingBody');
+      const loading = document.getElementById('rankingLoading');
+      
+      // Demo data (thay bằng fetchSheetCSV khi sheet được public)
+      const demoData = [
+        [1, "hùng", "18", "6", "6", "+12"],
+        [2, "dũng", "15", "6", "5", "+8"],
+        [3, "trí", "12", "6", "4", "+3"],
+        [4, "kiên", "9", "6", "3", "-1"],
+        [5, "tép", "6", "6", "2", "-5"],
+        [6, "long", "3", "6", "1", "-9"]
+      ];
+      
+      loading.style.display = 'block';
+      tbody.innerHTML = '';
+      
+      // Simulate loading
+      setTimeout(() => {
+        demoData.forEach(row => {
+          if(row[1]) { // Chỉ hiển thị dòng có dữ liệu
+            const tr = document.createElement('tr');
+            const rankClass = row[0] <= 3 ? `rank rank-${row[0]}` : 'rank';
+            tr.innerHTML = `
+              <td class="${rankClass}">#${row[0]}</td>
+              <td style="font-weight:500; text-transform:capitalize">${row[1]}</td>
+              <td style="color:var(--primary); font-weight:700">${row[2]}</td>
+              <td>${row[3]}</td>
+              <td>${row[4]}</td>
+              <td style="color:${row[5].startsWith('+') ? '#00d4aa' : '#ff6b6b'}">${row[5]}</td>
+            `;
+            tbody.appendChild(tr);
+          }
+        });
+        loading.style.display = 'none';
+        
+        // Update stats
+        document.getElementById('totalPlayers').textContent = demoData.filter(r => r[1]).length;
+      }, 800);
+    }
+
+    // ===== LOAD SCHEDULE TAB =====
+    async function loadSchedule() {
+      const container = document.getElementById('matchesContainer');
+      const loading = document.getElementById('scheduleLoading');
+      
+      // Demo match data
+      const demoMatches = [
+        { time: "14:00 - 15/04", player1: "hùng", player2: "dũng", court: "Sân 1", status: "Sắp diễn ra" },
+        { time: "15:30 - 15/04", player1: "trí", player2: "kiên", court: "Sân 2", status: "Sắp diễn ra" },
+        { time: "17:00 - 15/04", player1: "tép", player2: "long", court: "Sân 1", status: "Sắp diễn ra" },
+        { time: "14:00 - 16/04", player1: "hùng", player2: "trí", court: "Sân 3", status: "Chờ xác nhận" },
+        { time: "15:30 - 16/04", player1: "dũng", player2: "kiên", court: "Sân 2", status: "Chờ xác nhận" }
+      ];
+      
+      loading.style.display = 'block';
+      container.innerHTML = '';
+      
+      setTimeout(() => {
+        demoMatches.forEach(match => {
+          const card = document.createElement('div');
+          card.className = 'match-card';
+          card.innerHTML = `
+            <div class="match-time">⏰ ${match.time}</div>
+            <div class="match-players">
+              <span style="text-transform:capitalize">${match.player1}</span>
+              <span class="vs">VS</span>
+              <span style="text-transform:capitalize">${match.player2}</span>
+            </div>
+            <div class="match-court">🏟️ ${match.court}</div>
+            <div style="margin-top:0.8rem; color:var(--accent); font-size:0.9rem">
+              ${match.status}
+            </div>
+          `;
+          container.appendChild(card);
+        });
+        
+        // Update stats
+        document.getElementById('totalMatches').textContent = '12';
+        document.getElementById('upcomingMatches').textContent = demoMatches.length;
+        loading.style.display = 'none';
+      }, 800);
+    }
+
+    // ===== INIT =====
+    document.addEventListener('DOMContentLoaded', () => {
+      loadRanking(); // Load tab đầu tiên
+      
+      // Auto refresh mỗi 5 phút (khi có kết nối thật)
+      // setInterval(() => {
+      //   if(document.querySelector('.tab-btn.active').dataset.tab === 'ranking') loadRanking();
+      //   if(document.querySelector('.tab-btn.active').dataset.tab === 'schedule') loadSchedule();
+      // }, 300000);
+    });
+
+    // ===== HƯỚNG DẪN CẤU HÌNH GOOGLE SHEET =====
+    /*
+    🔧 Để kết nối dữ liệu thật từ Google Sheet:
+    
+    1. Mở Google Sheet → File → Share → Publish to web
+    2. Chọn từng tab → Format: CSV → Publish
+    3. Copy URL export, ví dụ:
+       https://docs.google.com/spreadsheets/d/1cDNrI43tQApk12oOB_SjQ6aPMcGbd18ToDqWLlfhD-c/export?gid=1092175948&format=csv
+       
+    4. Cập nhật SHEETS config ở trên với gid chính xác của từng tab
+    5. Bỏ comment code fetchSheetCSV() và thay demoData bằng dữ liệu thật
+    
+    📌 Tìm gid của tab:
+    - Mở tab trong Google Sheet
+    - Xem URL: .../edit#gid=123456789 → gid là 123456789
+    */
+  </script>
+</body>
+</html>
