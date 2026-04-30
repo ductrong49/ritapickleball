@@ -7,6 +7,923 @@
     <link href="https://cdn.jsdelivr.net/npm/@fontsource/roboto@5.1.0/index.css" rel="stylesheet">
     <style>
         :root {
+            --primary: #00e676;
+            --primary-dark: #00c853;
+            --accent: #ffd600;
+            --bg-dark: #0a0e17;
+            --bg-card: #111827;
+            --bg-card-hover: #1a2332;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --border-color: #1e293b;
+            --gradient-green: linear-gradient(135deg, #00c853, #00e676, #69f0ae);
+            --gradient-gold: linear-gradient(135deg, #ffd600, #ffab00);
+            --gradient-hero: linear-gradient(180deg, #0a0e17 0%, #0d1520 100%);
+            --shadow-glow: 0 0 40px rgba(0, 230, 118, 0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--gradient-hero);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-effects {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .bg-effects::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            left: -10%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle, rgba(0, 200, 83, 0.06) 0%, transparent 70%);
+            animation: float1 15s ease-in-out infinite;
+        }
+
+        .bg-effects::after {
+            content: '';
+            position: absolute;
+            bottom: -20%;
+            right: -10%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle, rgba(255, 214, 0, 0.04) 0%, transparent 70%);
+            animation: float2 18s ease-in-out infinite;
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(50px, 30px); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-40px, -40px); }
+        }
+
+        .court-lines-deco {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 50%;
+            border: 1px solid rgba(0, 230, 118, 0.025);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .court-lines-deco::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: rgba(0, 230, 118, 0.025);
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+
+        /* Header */
+        header {
+            padding: 35px 0 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        .logo-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 12px;
+        }
+
+        .logo-ball {
+            width: 72px;
+            height: 72px;
+            background: var(--gradient-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 35px rgba(0, 200, 83, 0.35);
+            animation: pulse 2.5s ease-in-out infinite;
+            position: relative;
+        }
+
+        .logo-ball::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, transparent 50%);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 35px rgba(0, 200, 83, 0.3); }
+            50% { transform: scale(1.06); box-shadow: 0 0 55px rgba(0, 200, 83, 0.5); }
+        }
+
+        .logo-ball svg {
+            width: 40px;
+            height: 40px;
+            fill: #0a0e17;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1.brand-title {
+            font-size: 2.6rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00e676, #69f0ae, #ffd600);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            line-height: 1.1;
+        }
+
+        .brand-sub {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-top: 6px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 28px 0 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 13px 30px;
+            border: 2px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            transition: left 0.5s;
+        }
+
+        .tab-btn:hover::before { left: 100%; }
+
+        .tab-btn:hover {
+            border-color: var(--primary);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: var(--gradient-green);
+            border-color: transparent;
+            color: var(--bg-dark);
+            box-shadow: 0 8px 28px rgba(0, 200, 83, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn span.icon { margin-right: 8px; }
+
+        /* Content */
+        .tab-panel {
+            display: none;
+            animation: fadeUp 0.5s ease;
+        }
+
+        .tab-panel.active { display: block; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title .ico {
+            width: 36px;
+            height: 36px;
+            background: var(--gradient-gold);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .updated-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* Table */
+        .card-wrap {
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .scroll-x { overflow-x: auto; }
+
+        table.data-tbl {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table.data-tbl thead th {
+            background: linear-gradient(135deg, #1a2332, #0d1520);
+            padding: 14px 18px;
+            text-align: center;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.75rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            white-space: nowrap;
+        }
+
+        table.data-tbl tbody tr {
+            border-bottom: 1px solid rgba(30, 41, 59, 0.6);
+            transition: background 0.25s;
+        }
+
+        table.data-tbl tbody tr:hover { background: var(--bg-card-hover); }
+
+        table.data-tbl tbody td {
+            padding: 12px 18px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+
+        /* Rank badges */
+        .rk {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-weight: 900;
+            font-size: 0.8rem;
+        }
+
+        .rk-1 { background: var(--gradient-gold); color: #000; box-shadow: 0 0 18px rgba(255, 214, 0, 0.35); }
+        .rk-2 { background: linear-gradient(135deg, #b0bec5, #90a4ae); color: #000; }
+        .rk-3 { background: linear-gradient(135deg, #cd7f32, #a0522d); color: #fff; }
+        .rk-d { background: var(--bg-card-hover); color: var(--text-secondary); border: 1px solid var(--border-color); }
+
+        /* Podium */
+        .podium {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding: 10px 0;
+        }
+
+        .pod-item {
+            text-align: center;
+            padding: 14px 18px;
+            border-radius: 14px 14px 0 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            min-width: 90px;
+            transition: transform 0.3s;
+        }
+
+        .pod-item:hover { transform: translateY(-4px); }
+
+        .pod-item.p1 {
+            height: 150px;
+            background: linear-gradient(180deg, rgba(255, 214, 0, 0.08), var(--bg-card));
+            border-color: rgba(255, 214, 0, 0.25);
+            order: 2;
+        }
+
+        .pod-item.p2 {
+            height: 120px;
+            background: linear-gradient(180deg, rgba(176, 190, 197, 0.06), var(--bg-card));
+            border-color: rgba(176, 190, 197, 0.2);
+            order: 1;
+        }
+
+        .pod-item.p3 {
+            height: 100px;
+            background: linear-gradient(180deg, rgba(205, 127, 50, 0.06), var(--bg-card));
+            border-color: rgba(205, 127, 50, 0.2);
+            order: 3;
+        }
+
+        .pod-emoji { font-size: 1.6rem; margin-bottom: 4px; }
+        .pod-name { font-weight: 800; font-size: 0.85rem; margin-bottom: 3px; }
+        .pod-val { font-size: 0.75rem; color: var(--text-secondary); }
+
+        /* Schedule Cards */
+        .sched-card {
+            background: var(--bg-card);
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 14px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .sched-card:hover {
+            border-color: rgba(0, 230, 118, 0.3);
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-2px);
+        }
+
+        .sched-top {
+            background: linear-gradient(135deg, #1a2332, #0d1520);
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--primary);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .sched-date {
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sched-badge {
+            background: var(--gradient-gold);
+            color: var(--bg-dark);
+            padding: 3px 12px;
+            border-radius: 18px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .sched-match {
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .sched-team {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 140px;
+        }
+
+        .sched-team.r { flex-direction: row-reverse; text-align: right; }
+
+        .team-dot {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .team-dot.h { background: linear-gradient(135deg, #1565c0, #42a5f5); }
+        .team-dot.a { background: linear-gradient(135deg, #c62828, #ef5350); }
+
+        .t-name { font-weight: 700; font-size: 0.95rem; }
+        .t-sub { font-size: 0.75rem; color: var(--text-secondary); }
+
+        .vs-circle {
+            background: var(--gradient-green);
+            color: var(--bg-dark);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+            box-shadow: 0 0 18px rgba(0, 200, 83, 0.25);
+        }
+
+        .sched-details {
+            padding: 0 18px 14px;
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .sched-info {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Loading & Error */
+        .loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px;
+            gap: 18px;
+        }
+
+        .spinner {
+            width: 44px;
+            height: 44px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loader-txt { color: var(--text-secondary); font-size: 0.85rem; }
+
+        .err-box {
+            text-align: center;
+            padding: 40px 20px;
+            color: #ff5252;
+        }
+
+        .err-box .ico { font-size: 2.5rem; margin-bottom: 8px; }
+        .err-box p { font-size: 0.9rem; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 24px 0 10px;
+            margin-top: 30px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        footer .b { color: var(--primary); font-weight: 700; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: #2a3a4a; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1.brand-title { font-size: 1.8rem; letter-spacing: 1px; }
+            .brand-sub { letter-spacing: 3px; font-size: 0.7rem; }
+            .logo-ball { width: 56px; height: 56px; }
+            .logo-ball svg { width: 32px; height: 32px; }
+            .tab-btn { padding: 10px 18px; font-size: 0.8rem; letter-spacing: 1px; }
+            table.data-tbl td, table.data-tbl th { padding: 10px 12px; font-size: 0.8rem; }
+            .podium { gap: 8px; }
+            .pod-item { min-width: 75px; padding: 10px 12px; }
+            .sched-match { flex-direction: column; text-align: center; }
+            .sched-team, .sched-team.r { flex-direction: column; text-align: center; }
+        }
+
+        /* Column highlight for specific data */
+        .data-cell { min-width: 60px; }
+    </style>
+</head>
+<body>
+    <div class="bg-effects"></div>
+    <div class="court-lines-deco"></div>
+
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <div class="logo-wrap">
+                <div class="logo-ball">
+                    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="32" cy="32" r="26" fill="none" stroke="#0a0e17" stroke-width="2.5"/>
+                        <circle cx="32" cy="32" r="7" fill="#0a0e17" opacity="0.7"/>
+                        <line x1="32" y1="6" x2="32" y2="25" stroke="#0a0e17" stroke-width="2"/>
+                        <line x1="32" y1="39" x2="32" y2="58" stroke="#0a0e17" stroke-width="2"/>
+                        <line x1="6" y1="32" x2="25" y2="32" stroke="#0a0e17" stroke-width="2"/>
+                        <line x1="39" y1="32" x2="58" y2="32" stroke="#0a0e17" stroke-width="2"/>
+                        <line x1="13.5" y1="13.5" x2="27" y2="27" stroke="#0a0e17" stroke-width="1.8"/>
+                        <line x1="37" y1="37" x2="50.5" y2="50.5" stroke="#0a0e17" stroke-width="1.8"/>
+                        <line x1="50.5" y1="13.5" x2="37" y2="27" stroke="#0a0e17" stroke-width="1.8"/>
+                        <line x1="27" y1="37" x2="13.5" y2="50.5" stroke="#0a0e17" stroke-width="1.8"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="brand-title">Robin Round<br>Pickleball</h1>
+                    <div class="brand-sub">Season 2026</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- TABS -->
+        <nav class="tabs">
+            <button class="tab-btn active" data-target="tab1"><span class="icon">🏆</span>Bảng Xếp Hạng</button>
+            <button class="tab-btn" data-target="tab2"><span class="icon">📅</span>Lịch Đấu</button>
+        </nav>
+
+        <!-- TAB 1: Rankings -->
+        <section id="tab1" class="tab-panel active">
+            <div class="section-head">
+                <div class="section-title"><div class="ico">🏆</div>Bảng Xếp Hạng</div>
+                <div class="updated-label" id="upd-rank"></div>
+            </div>
+            <div id="content-rank">
+                <div class="loader"><div class="spinner"></div><div class="loader-txt">Đang tải bảng xếp hạng...</div></div>
+            </div>
+        </section>
+
+        <!-- TAB 2: Schedule -->
+        <section id="tab2" class="tab-panel">
+            <div class="section-head">
+                <div class="section-title"><div class="ico">📅</div>Lịch Đấu Đội</div>
+                <div class="updated-label" id="upd-sched"></div>
+            </div>
+            <div id="content-sched">
+                <div class="loader"><div class="spinner"></div><div class="loader-txt">Đang tải lịch đấu...</div></div>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2026 <span class="b">ROBIN ROUND PICKLEBALL</span> — Designed for Champions 🏆</p>
+        </footer>
+    </div>
+
+    <script>
+        const SID = '1cDNrI43tQApk12oOB_SjQ6aPMcGbd18ToDqWLlfhD-c';
+        const CSV = `https://docs.google.com/spreadsheets/d/${SID}/gviz/tq?tqx=out:csv`;
+
+        // Tabs
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.target).classList.add('active');
+            });
+        });
+
+        // Fetch
+        async function fetchCSV(sheet, range) {
+            const u = `${CSV}&sheet=${encodeURIComponent(sheet)}&range=${encodeURIComponent(range)}`;
+            const r = await fetch(u);
+            if (!r.ok) throw new Error(`HTTP ${r.status}`);
+            const txt = await r.text();
+            return parseCSV(txt);
+        }
+
+        function parseCSV(raw) {
+            const rows = [];
+            let cell = '', inQ = false, row = [];
+            for (let i = 0; i < raw.length; i++) {
+                const c = raw[i], n = raw[i + 1];
+                if (inQ) {
+                    if (c === '"' && n === '"') { cell += '"'; i++; }
+                    else if (c === '"') inQ = false;
+                    else cell += c;
+                } else {
+                    if (c === '"') inQ = true;
+                    else if (c === ',') { row.push(cell.trim()); cell = ''; }
+                    else if (c === '\n' || c === '\r') {
+                        if (c === '\r' && n === '\n') i++;
+                        row.push(cell.trim());
+                        if (row.some(v => v !== '')) rows.push(row);
+                        row = []; cell = '';
+                    } else cell += c;
+                }
+            }
+            if (cell || row.length) {
+                row.push(cell.trim());
+                if (row.some(v => v !== '')) rows.push(row);
+            }
+            return rows;
+        }
+
+        // Render Rankings - K2:L19
+        function renderRank(data) {
+            const el = document.getElementById('content-rank');
+
+            if (!data || data.length === 0) {
+                el.innerHTML = '<div class="err-box"><div class="ico">📭</div><p>Không có dữ liệu</p></div>';
+                return;
+            }
+
+            // The range K2:L19 gives us columns K and L (2 columns)
+            // Row 1 of the result = K2:L2, etc.
+            // We should display all rows that have data
+            const dataRows = data.filter(r => r.some(v => v !== ''));
+
+            if (dataRows.length === 0) {
+                el.innerHTML = '<div class="err-box"><div class="ico">📭</div><p>Không có dữ liệu</p></div>';
+                return;
+            }
+
+            // Check if first row looks like headers
+            let headers = ['Xếp Hạng', 'Kết Quả'];
+            let bodyRows = dataRows;
+
+            // If first row contains text that looks like headers
+            const firstRow = dataRows[0];
+            const isHeader = firstRow.some(v => isNaN(parseFloat(v)) && v.length > 0 && !v.match(/^\d/));
+
+            if (isHeader) {
+                headers = firstRow;
+                bodyRows = dataRows.slice(1);
+            }
+
+            // Build podium for top 3
+            let podiumHTML = '';
+            if (bodyRows.length >= 3) {
+                const top = [bodyRows[0], bodyRows[1], bodyRows[2]];
+                const order = [
+                    { idx: 1, cls: 'p2', emoji: '🥈' },
+                    { idx: 0, cls: 'p1', emoji: '🥇' },
+                    { idx: 2, cls: 'p3', emoji: '🥉' }
+                ];
+
+                podiumHTML = '<div class="podium">';
+                order.forEach(o => {
+                    const r = top[o.idx];
+                    const name = r[1] || r[0] || 'N/A';
+                    const val = r[r.length > 1 ? 1 : 0] || '';
+                    podiumHTML += `
+                        <div class="pod-item ${o.cls}">
+                            <div class="pod-emoji">${o.emoji}</div>
+                            <div class="pod-name">${name}</div>
+                            <div class="pod-val">${val}</div>
+                        </div>
+                    `;
+                });
+                podiumHTML += '</div>';
+            }
+
+            // Build table
+            let html = '<div class="card-wrap"><div class="scroll-x"><table class="data-tbl"><thead><tr>';
+            html += '<th>#</th>';
+            headers.forEach(h => { html += `<th>${h}</th>`; });
+            html += '</tr></thead><tbody>';
+
+            bodyRows.forEach((row, i) => {
+                if (!row.some(v => v !== '')) return;
+                const rank = i + 1;
+                const rkCls = rank === 1 ? 'rk-1' : rank === 2 ? 'rk-2' : rank === 3 ? 'rk-3' : 'rk-d';
+
+                html += '<tr>';
+                html += `<td><span class="rk ${rkCls}">${rank}</span></td>`;
+                row.forEach(v => {
+                    html += `<td class="data-cell">${v || '—'}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody></table></div></div>';
+
+            el.innerHTML = podiumHTML + html;
+            document.getElementById('upd-rank').textContent = `Cập nhật: ${new Date().toLocaleString('vi-VN')}`;
+        }
+
+        // Render Schedule - A1:G15
+        function renderSched(data) {
+            const el = document.getElementById('content-sched');
+
+            if (!data || data.length <= 1) {
+                el.innerHTML = '<div class="err-box"><div class="ico">📭</div><p>Không có dữ liệu lịch đấu</p></div>';
+                return;
+            }
+
+            const headers = data[0];
+            const bodyRows = data.slice(1).filter(r => r.some(v => v !== ''));
+
+            if (bodyRows.length === 0) {
+                el.innerHTML = '<div class="err-box"><div class="ico">📭</div><p>Không có dữ liệu lịch đấu</p></div>';
+                return;
+            }
+
+            // Determine column mapping from headers
+            // Typical columns: Ngày, Vòng, Đội 1, Đội 2, Giờ, Sân, Trạng thái
+            // We'll use the actual headers to find the right columns
+            function findCol(keywords) {
+                return headers.findIndex(h => {
+                    const low = h.toLowerCase();
+                    return keywords.some(k => low.includes(k));
+                });
+            }
+
+            const colDate = findCol(['ngày', 'date', 'thời gian']);
+            const colRound = findCol(['vòng', 'round', 'giai đoạn']);
+            const colTeam1 = findCol(['đội 1', 'team 1', 'nhà', 'home', 'đội a']);
+            const colTeam2 = findCol(['đội 2', 'team 2', 'khách', 'away', 'đội b']);
+            const colTime = findCol(['giờ', 'giờ', 'time']);
+            const colCourt = findCol(['sân', 'court', 'đấu']);
+            const colStatus = findCol(['trạng thái', 'status', 'kết quả', 'ghi chú']);
+
+            let cards = '';
+
+            bodyRows.forEach((row, idx) => {
+                const getDate = (c) => c >= 0 ? (row[c] || '') : '';
+                const date = getDate(colDate);
+                const round = getDate(colRound);
+                const team1 = colTeam1 >= 0 ? (row[colTeam1] || 'Đội 1') : 'Đội 1';
+                const team2 = colTeam2 >= 0 ? (row[colTeam2] || 'Đội 2') : 'Đội 2';
+                const time = getDate(colTime);
+                const court = getDate(colCourt);
+                const status = getDate(colStatus);
+
+                // Format date
+                let dateStr = date;
+                if (date) {
+                    try {
+                        const d = new Date(date);
+                        if (!isNaN(d)) {
+                            dateStr = d.toLocaleDateString('vi-VN', {
+                                weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'
+                            });
+                        }
+                    } catch(e) {}
+                }
+
+                const ini1 = team1.substring(0, 2).toUpperCase();
+                const ini2 = team2.substring(0, 2).toUpperCase();
+
+                let statusHTML = '';
+                if (status) {
+                    const sl = status.toLowerCase();
+                    if (sl.includes('xong') || sl.includes('finish') || sl.includes('hoàn') || sl.includes('kết thúc')) {
+                        statusHTML = '<span style="color: var(--primary); font-weight:700;">✅ Đã đấu</span>';
+                    } else if (sl.includes('hủy') || sl.includes('cancel')) {
+                        statusHTML = '<span style="color:#ff5252;font-weight:700;">❌ Đã hủy</span>';
+                    } else if (sl.includes('đang') || sl.includes('live')) {
+                        statusHTML = '<span style="color:var(--accent);font-weight:700;">🔴 Đang đấu</span>';
+                    } else {
+                        statusHTML = '<span style="color:var(--text-secondary);">⏳ Sắp diễn ra</span>';
+                    }
+                }
+
+                cards += `
+                    <div class="sched-card" style="animation-delay: ${idx * 0.08}s">
+                        <div class="sched-top">
+                            <div class="sched-date">${dateStr || 'Chưa xác định'}</div>
+                            ${round ? `<div class="sched-badge">${round}</div>` : ''}
+                        </div>
+                        <div class="sched-match">
+                            <div class="sched-team">
+                                <div class="team-dot h">${ini1}</div>
+                                <div>
+                                    <div class="t-name">${team1}</div>
+                                    <div class="t-sub">Đội nhà</div>
+                                </div>
+                            </div>
+                            <div class="vs-circle">VS</div>
+                            <div class="sched-team r">
+                                <div class="team-dot a">${ini2}</div>
+                                <div>
+                                    <div class="t-name">${team2}</div>
+                                    <div class="t-sub">Đội khách</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sched-details">
+                            ${time ? `<div class="sched-info">⏰ ${time}</div>` : ''}
+                            ${court ? `<div class="sched-info">🏟️ ${court}</div>` : ''}
+                            ${status ? `<div class="sched-info">${statusHTML}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            el.innerHTML = cards;
+            document.getElementById('upd-sched').textContent = `Cập nhật: ${new Date().toLocaleString('vi-VN')}`;
+        }
+
+        // Init
+        async function init() {
+            try {
+                const [rankData, schedData] = await Promise.all([
+                    fetchCSV('BangXepHang', 'K2:L19'),
+                    fetchCSV('LichDauDoi', 'A1:G15')
+                ]);
+
+                renderRank(rankData);
+                renderSched(schedData);
+            } catch (err) {
+                console.error('Fetch error:', err);
+                // Fallback without range
+                try {
+                    const [rankData, schedData] = await Promise.all([
+                        fetchCSV('BangXepHang', ''),
+                        fetchCSV('LichDauDoi', '')
+                    ]);
+                    renderRank(rankData);
+                    renderSched(schedData);
+                } catch (err2) {
+                    document.getElementById('content-rank').innerHTML =
+                        `<div class="err-box"><div class="ico">⚠️</div><p>Lỗi kết nối Google Sheets</p><p style="font-size:0.8rem;margin-top:8px;color:var(--text-secondary)">${err2.message}</p></div>`;
+                    document.getElementById('content-sched').innerHTML =
+                        `<div class="err-box"><div class="ico">⚠️</div><p>Lỗi kết nối Google Sheets</p></div>`;
+                }
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROBIN ROUND PICKLEBALL</title>
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/roboto@5.1.0/index.css" rel="stylesheet">
+    <style>
+        :root {
             --primary: #00c853;
             --primary-dark: #009624;
             --accent: #ffd600;
