@@ -20,9 +20,7 @@
             --grad-gold: linear-gradient(135deg, #ffd600, #ffab00);
             --shadow: 0 0 30px rgba(0, 230, 118, 0.12);
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
             font-family: 'Roboto', sans-serif;
             background: linear-gradient(180deg, #0a0e17 0%, #0d1520 100%);
@@ -30,7 +28,6 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-
         .bg-fx { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
         .bg-fx::before {
             content: ''; position: absolute; top: -10%; left: -10%; width: 50%; height: 50%;
@@ -44,10 +41,7 @@
         }
         @keyframes f1 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(40px, 30px); } }
         @keyframes f2 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-50px, -40px); } }
-
         .container { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 20px 40px; }
-
-        /* Header */
         header { padding: 30px 0 20px; text-align: center; position: relative; }
         header::after {
             content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
@@ -67,8 +61,6 @@
             text-transform: uppercase; letter-spacing: 2px; line-height: 1.1;
         }
         .sub { font-size: 0.8rem; color: var(--text-sub); letter-spacing: 5px; text-transform: uppercase; margin-top: 5px; }
-
-        /* Tabs */
         .nav { display: flex; justify-content: center; gap: 12px; margin: 25px 0 20px; flex-wrap: wrap; }
         .btn {
             padding: 12px 28px; border: 2px solid var(--border); background: var(--bg-card);
@@ -77,18 +69,13 @@
         }
         .btn:hover { border-color: var(--primary); color: var(--text-main); transform: translateY(-2px); }
         .btn.on { background: var(--grad-green); border-color: transparent; color: var(--bg-dark); box-shadow: 0 8px 25px rgba(0, 200, 83, 0.25); transform: translateY(-2px); }
-
-        /* Panels */
         .panel { display: none; animation: up 0.4s ease; }
         .panel.on { display: block; }
         @keyframes up { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-
         .head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
         .ttl { font-size: 1.3rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
         .ttl i { display: inline-block; width: 34px; height: 34px; background: var(--grad-gold); border-radius: 8px; text-align: center; line-height: 34px; font-size: 1.1rem; font-style: normal; }
         .upd { font-size: 0.75rem; color: var(--text-sub); font-style: italic; }
-
-        /* Table */
         .box { background: var(--bg-card); border-radius: 14px; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow); }
         .wrap { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; }
@@ -100,7 +87,6 @@
         table tr { border-bottom: 1px solid rgba(30, 41, 59, 0.5); transition: background 0.2s; }
         table tr:hover { background: var(--bg-hover); }
         table td { padding: 11px 16px; text-align: center; font-size: 0.88rem; color: var(--text-main); white-space: nowrap; }
-
         .rk {
             display: inline-flex; width: 30px; height: 30px; border-radius: 50%;
             align-items: center; justify-content: center; font-weight: 800; font-size: 0.78rem;
@@ -109,8 +95,6 @@
         .rk-2 { background: linear-gradient(135deg, #b0bec5, #90a4ae); color: #000; }
         .rk-3 { background: linear-gradient(135deg, #cd7f32, #a0522d); color: #fff; }
         .rk-d { background: var(--bg-hover); color: var(--text-sub); border: 1px solid var(--border); }
-
-        /* Podium */
         .pod { display: flex; justify-content: center; align-items: flex-end; gap: 10px; margin-bottom: 20px; padding: 10px 0; }
         .pi {
             text-align: center; padding: 12px; border-radius: 12px 12px 0 0; background: var(--bg-card);
@@ -123,8 +107,6 @@
         .pe { font-size: 1.4rem; }
         .pn { font-weight: 800; font-size: 0.85rem; margin-bottom: 2px; }
         .pv { font-size: 0.72rem; color: var(--text-sub); }
-
-        /* Schedule */
         .mc { background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 12px; transition: all 0.3s; }
         .mc:hover { border-color: rgba(0, 230, 118, 0.3); box-shadow: var(--shadow); transform: translateY(-2px); }
         .mt { background: linear-gradient(135deg, #1a2332, #0d1520); padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--primary); }
@@ -138,11 +120,16 @@
         .ta { background: linear-gradient(135deg, #c62828, #ef5350); }
         .tn { font-weight: 700; font-size: 0.92rem; }
         .ts { font-size: 0.72rem; color: var(--text-sub); }
+        .team-score {
+            display: inline-flex; align-items: center; gap: 4px;
+            background: linear-gradient(135deg, rgba(255, 214, 0, 0.2), rgba(255, 171, 0, 0.1));
+            border: 1px solid rgba(255, 214, 0, 0.3);
+            padding: 3px 8px; border-radius: 8px; margin-top: 4px;
+            font-size: 0.8rem; color: var(--accent); font-weight: 800;
+        }
         .vs { background: var(--grad-green); color: var(--bg-dark); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.75rem; flex-shrink: 0; }
         .mx { padding: 0 16px 12px; display: flex; gap: 16px; flex-wrap: wrap; }
         .mi { display: flex; align-items: center; gap: 5px; font-size: 0.8rem; color: var(--text-sub); }
-
-        /* Loader/Error */
         .ld { display: flex; flex-direction: column; align-items: center; padding: 40px; gap: 15px; }
         .sp { width: 38px; height: 38px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.7s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -167,12 +154,10 @@
                 </div>
             </div>
         </header>
-
         <nav class="nav">
             <button class="btn on" data-t="tab1">🏆 Bảng Xếp Hạng</button>
             <button class="btn" data-t="tab2">📅 Lịch Đấu</button>
         </nav>
-
         <section id="tab1" class="panel on">
             <div class="head">
                 <div class="ttl"><i>🏆</i>Bảng Xếp Hạng</div>
@@ -180,7 +165,6 @@
             </div>
             <div id="cr"><div class="ld"><div class="sp"></div><div class="lt">Đang tải bảng xếp hạng...</div></div></div>
         </section>
-
         <section id="tab2" class="panel">
             <div class="head">
                 <div class="ttl"><i>📅</i>Lịch Đấu Đội</div>
@@ -188,13 +172,12 @@
             </div>
             <div id="cs"><div class="ld"><div class="sp"></div><div class="lt">Đang tải lịch đấu...</div></div></div>
         </section>
-
         <footer>© 2026 <b>ROBIN ROUND PICKLEBALL</b> — Designed for Champions 🏆</footer>
     </div>
 
     <script>
         const SID = '1cDNrI43tQApk12oOB_SjQ6aPMcGbd18ToDqWLlfhD-c';
-        const G = `https://docs.google.com/spreadsheets/d/${SID}/gviz/tq?tqx=out:csv`;
+        const GVIZ = `https://docs.google.com/spreadsheets/d/${SID}/gviz/tq?tqx=out:csv`;
 
         document.querySelectorAll('.btn').forEach(b => b.addEventListener('click', () => {
             document.querySelectorAll('.btn').forEach(x => x.classList.remove('on'));
@@ -203,54 +186,73 @@
             document.getElementById(b.dataset.t).classList.add('on');
         }));
 
-        async function f(s, r) {
-            const u = `${G}&sheet=${encodeURIComponent(s)}&range=${encodeURIComponent(r)}`;
+        async function fetchData(sheet, range) {
+            const u = `${GVIZ}&sheet=${encodeURIComponent(sheet)}&range=${encodeURIComponent(range)}`;
             const res = await fetch(u);
             if (!res.ok) throw new Error(res.status);
-            return p(await res.text());
+            return parseCSV(await res.text());
         }
 
-        function p(t) {
-            const R = []; let c = '', q = false, r = [];
-            for (let i = 0; i < t.length; i++) {
-                const x = t[i], n = t[i + 1];
-                if (q) { if (x === '"' && n === '"') { c += '"'; i++; } else if (x === '"') q = false; else c += x; }
-                else {
-                    if (x === '"') q = true;
-                    else if (x === ',') { r.push(c.trim()); c = ''; }
-                    else if (x === '\n' || x === '\r') { if (x === '\r' && n === '\n') i++; r.push(c.trim()); if (r.some(v => v !== '')) R.push(r); r = []; c = ''; }
-                    else c += x;
+        function parseCSV(raw) {
+            const R = []; let cell = '', q = false, row = [];
+            for (let i = 0; i < raw.length; i++) {
+                const ch = raw[i], nx = raw[i + 1];
+                if (q) {
+                    if (ch === '"' && nx === '"') { cell += '"'; i++; }
+                    else if (ch === '"') q = false;
+                    else cell += ch;
+                } else {
+                    if (ch === '"') q = true;
+                    else if (ch === ',') { row.push(cell.trim()); cell = ''; }
+                    else if (ch === '\n' || ch === '\r') {
+                        if (ch === '\r' && nx === '\n') i++;
+                        row.push(cell.trim());
+                        if (row.some(v => v !== '')) R.push(row);
+                        row = []; cell = '';
+                    } else cell += ch;
                 }
             }
-            if (c || r.length) { r.push(c.trim()); if (r.some(v => v !== '')) R.push(r); }
+            if (cell || row.length) { row.push(cell.trim()); if (row.some(v => v !== '')) R.push(row); }
             return R;
         }
 
-        function rr(d) {
+        // Render Rankings
+        function renderRankings(data) {
             const el = document.getElementById('cr');
-            if (!d || !d.length) { el.innerHTML = '<div class="er"><i>📭</i>Không có dữ liệu</div>'; return; }
-            const dr = d.filter(r => r.some(v => v !== ''));
+            if (!data || data.length === 0) { el.innerHTML = '<div class="er"><i>📭</i>Không có dữ liệu</div>'; return; }
+            const dr = data.filter(r => r.some(v => v !== ''));
             if (!dr.length) { el.innerHTML = '<div class="er"><i>📭</i>Không có dữ liệu</div>'; return; }
 
-            let h = ['Hạng', 'Dữ Liệu'], b = dr;
+            let h = ['Hạng', 'Dữ Liệu'], bodyRows = dr;
             const fr = dr[0];
-            if (fr.some(v => isNaN(parseFloat(v)) && v && !v.match(/^\d/))) { h = fr; b = dr.slice(1); }
+            if (fr.some(v => isNaN(parseFloat(v)) && v && !v.match(/^\d/))) { h = fr; bodyRows = dr.slice(1); }
 
+            // Podium
             let pod = '';
-            if (b.length >= 3) {
-                const o = [{i:1, c:'p2', e:'🥈'}, {i:0, c:'p1', e:'🥇'}, {i:2, c:'p3', e:'🥉'}];
+            if (bodyRows.length >= 3) {
+                const top = [bodyRows[0], bodyRows[1], bodyRows[2]];
+                const order = [{i:1, c:'p2', e:'🥈'}, {i:0, c:'p1', e:'🥇'}, {i:2, c:'p3', e:'🥉'}];
                 pod = '<div class="pod">';
-                o.forEach(x => {
-                    const v = b[x.i][1] || b[x.i][0] || '';
-                    pod += `<div class="pi ${x.c}"><div class="pe">${x.e}</div><div class="pn">${v}</div><div class="pv">${b[x.i][0] || ''}</div></div>`;
+                order.forEach(x => {
+                    const row = top[x.i];
+                    let nameVal = '', scoreVal = '';
+                    for (let c = 0; c < row.length; c++) {
+                        const v = row[c];
+                        if (isNaN(parseFloat(v)) || !v.match(/^[\d,.]+$/)) { if (!nameVal) nameVal = v; }
+                        else { if (!scoreVal) scoreVal = v; }
+                    }
+                    if (!nameVal) nameVal = row[0] || row[1] || '';
+                    if (!scoreVal) scoreVal = row[1] || row[0] || '';
+                    pod += `<div class="pi ${x.c}"><div class="pe">${x.e}</div><div class="pn">${nameVal}</div><div class="pv">${scoreVal}</div></div>`;
                 });
                 pod += '</div>';
             }
 
+            // Table
             let tb = '<div class="box"><div class="wrap"><table><thead><tr><th>#</th>';
             h.forEach(x => tb += `<th>${x}</th>`);
             tb += '</tr></thead><tbody>';
-            b.forEach((row, i) => {
+            bodyRows.forEach((row, i) => {
                 const rn = i + 1;
                 const rc = rn === 1 ? 'rk-1' : rn === 2 ? 'rk-2' : rn === 3 ? 'rk-3' : 'rk-d';
                 tb += `<tr><td><span class="rk ${rc}">${rn}</span></td>`;
@@ -262,30 +264,37 @@
             document.getElementById('ur').textContent = `Cập nhật: ${new Date().toLocaleString('vi-VN')}`;
         }
 
-        function rs(d) {
+        // Render Schedule with explicit E (index 4) and F (index 5) scores
+        function renderSchedule(data) {
             const el = document.getElementById('cs');
-            if (!d || d.length <= 1) { el.innerHTML = '<div class="er"><i>📭</i>Không có dữ liệu</div>'; return; }
-            const h = d[0], b = d.slice(1).filter(r => r.some(v => v !== ''));
-            if (!b.length) { el.innerHTML = '<div class="er"><i>📭</i>Không có dữ liệu</div>'; return; }
+            if (!data || data.length <= 1) { el.innerHTML = '<div class="er"><i>📭</i>Không có dữ liệu</div>'; return; }
+            const h = data[0], bodyRows = data.slice(1).filter(r => r.some(v => v !== ''));
+            if (!bodyRows.length) { el.innerHTML = '<div class="er"><i>📭</i>Không có dữ liệu</div>'; return; }
 
+            // Map columns
             const fc = k => h.findIndex(x => x.toLowerCase().includes(k));
             const cd = fc('ngày') >= 0 ? fc('ngày') : fc('date') >= 0 ? fc('date') : fc('thời') >= 0 ? fc('thời') : 0;
-            const cr = fc('vòng') >= 0 ? fc('vòng') : fc('round') >= 0 ? fc('round') : -1;
+            const cRd = fc('vòng') >= 0 ? fc('vòng') : fc('round') >= 0 ? fc('round') : -1;
             const c1 = fc('đội 1') >= 0 ? fc('đội 1') : fc('team 1') >= 0 ? fc('team 1') : fc('nhà') >= 0 ? fc('nhà') : 2;
             const c2 = fc('đội 2') >= 0 ? fc('đội 2') : fc('team 2') >= 0 ? fc('team 2') : fc('khách') >= 0 ? fc('khách') : 3;
-            const ct = fc('giờ') >= 0 ? fc('giờ') : fc('time') >= 0 ? fc('time') : -1;
-            const cc = fc('sân') >= 0 ? fc('sân') : fc('court') >= 0 ? fc('court') : -1;
-            const cs = fc('trạng') >= 0 ? fc('trạng') : fc('status') >= 0 ? fc('status') : fc('kết') >= 0 ? fc('kết') : -1;
+            const cSt = fc('trạng') >= 0 ? fc('trạng') : fc('status') >= 0 ? fc('status') : fc('kết') >= 0 ? fc('kết') : 6;
+            
+            // Explicit column mapping for scores from columns E and F
+            // A=0, B=1, C=2, D=3, E=4, F=5, G=6
+            const cScore1 = 4; // Cột E
+            const cScore2 = 5; // Cột F
 
             let cards = '';
-            b.forEach((row, i) => {
-                const dt = cd >= 0 ? (row[cd] || '') : '';
-                const rd = cr >= 0 ? (row[cr] || '') : '';
+            bodyRows.forEach((row) => {
+                const dt = row[cd] || '';
+                const rd = cRd >= 0 ? (row[cRd] || '') : '';
                 const t1 = c1 >= 0 ? (row[c1] || 'Đội 1') : 'Đội 1';
                 const t2 = c2 >= 0 ? (row[c2] || 'Đội 2') : 'Đội 2';
-                const tm = ct >= 0 ? (row[ct] || '') : '';
-                const cr2 = cc >= 0 ? (row[cc] || '') : '';
-                const st = cs >= 0 ? (row[cs] || '') : '';
+                const st = cSt >= 0 ? (row[cSt] || '') : '';
+                
+                // Read scores directly from columns E and F
+                const score1 = row[cScore1] || '-';
+                const score2 = row[cScore2] || '-';
 
                 let ds = dt;
                 if (dt) { try { const d = new Date(dt); if (!isNaN(d)) ds = d.toLocaleDateString('vi-VN', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' }); } catch(e) {} }
@@ -303,15 +312,34 @@
                 }
 
                 cards += `
-                <div class="mc"><div class="mt"><div class="md">${ds || 'Chưa xác định'}</div>${rd ? `<div class="mr">${rd}</div>` : ''}</div>
-                <div class="mb">
-                    <div class="tm"><div class="td th">${i1}</div><div><div class="tn">${t1}</div><div class="ts">Đội nhà</div></div></div>
-                    <div class="vs">VS</div>
-                    <div class="tm tr"><div class="td ta">${i2}</div><div><div class="tn">${t2}</div><div class="ts">Đội khách</div></div></div>
-                </div>
-                <div class="mx">
-                    ${tm ? `<div class="mi">⏰ ${tm}</div>` : ''}${cr2 ? `<div class="mi">🏟️ ${cr2}</div>` : ''}${st ? `<div class="mi">${sh}</div>` : ''}
-                </div></div>`;
+                <div class="mc">
+                    <div class="mt">
+                        <div class="md">${ds || 'Chưa xác định'}</div>
+                        ${rd ? `<div class="mr">${rd}</div>` : ''}
+                    </div>
+                    <div class="mb">
+                        <div class="tm">
+                            <div class="td th">${i1}</div>
+                            <div>
+                                <div class="tn">${t1}</div>
+                                <div class="ts"> </div>
+                                <div class="team-score">⭐ ${score1} </div>
+                            </div>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="tm tr">
+                            <div class="td ta">${i2}</div>
+                            <div>
+                                <div class="tn">${t2}</div>
+                                <div class="ts"> </div>
+                                <div class="team-score">⭐ ${score2} </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mx">
+                        ${st ? `<div class="mi">${sh}</div>` : ''}
+                    </div>
+                </div>`;
             });
             el.innerHTML = cards;
             document.getElementById('us').textContent = `Cập nhật: ${new Date().toLocaleString('vi-VN')}`;
@@ -319,16 +347,24 @@
 
         async function init() {
             try {
-                const [r, s] = await Promise.all([f('BangXepHang', 'K1:L9'), f('LichDauDoi', 'A1:G15')]);
-                rr(r); rs(s);
+                const [rankData, schedData] = await Promise.all([
+                    fetchData('BangXepHang', 'K1:L9'),
+                    fetchData('LichDauDoi', 'A1:G15')
+                ]);
+                renderRankings(rankData);
+                renderSchedule(schedData);
             } catch (e) {
-                console.error(e);
+                console.error('Error:', e);
                 try {
-                    const [r, s] = await Promise.all([f('BangXepHang', ''), f('LichDauDoi', '')]);
-                    rr(r); rs(s);
+                    const [rankData, schedData] = await Promise.all([
+                        fetchData('BangXepHang', ''),
+                        fetchData('LichDauDoi', '')
+                    ]);
+                    renderRankings(rankData);
+                    renderSchedule(schedData);
                 } catch (e2) {
-                    document.getElementById('cr').innerHTML = '<div class="er"><i>⚠️</i>Lỗi kết nối</div>';
-                    document.getElementById('cs').innerHTML = '<div class="er"><i>⚠️</i>Lỗi kết nối</div>';
+                    document.getElementById('cr').innerHTML = '<div class="er"><i>⚠️</i>Lỗi kết nối Google Sheets</div>';
+                    document.getElementById('cs').innerHTML = '<div class="er"><i>⚠️</i>Lỗi kết nối Google Sheets</div>';
                 }
             }
         }
@@ -336,4 +372,3 @@
     </script>
 </body>
 </html>
-
