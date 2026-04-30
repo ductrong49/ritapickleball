@@ -120,12 +120,12 @@
         .ta { background: linear-gradient(135deg, #c62828, #ef5350); }
         .tn { font-weight: 700; font-size: 0.92rem; }
         .ts { font-size: 0.72rem; color: var(--text-sub); }
-        .team-pts {
+        .team-score {
             display: inline-flex; align-items: center; gap: 4px;
-            background: linear-gradient(135deg, rgba(255, 214, 0, 0.15), rgba(255, 171, 0, 0.08));
+            background: linear-gradient(135deg, rgba(255, 214, 0, 0.2), rgba(255, 171, 0, 0.1));
             border: 1px solid rgba(255, 214, 0, 0.3);
-            padding: 2px 8px; border-radius: 10px; margin-top: 4px;
-            font-size: 0.72rem; color: var(--accent); font-weight: 700;
+            padding: 3px 8px; border-radius: 8px; margin-top: 4px;
+            font-size: 0.8rem; color: var(--accent); font-weight: 800;
         }
         .vs { background: var(--grad-green); color: var(--bg-dark); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.75rem; flex-shrink: 0; }
         .mx { padding: 0 16px 12px; display: flex; gap: 16px; flex-wrap: wrap; }
@@ -178,8 +178,6 @@
     <script>
         const SID = '1cDNrI43tQApk12oOB_SjQ6aPMcGbd18ToDqWLlfhD-c';
         const GVIZ = `https://docs.google.com/spreadsheets/d/${SID}/gviz/tq?tqx=out:csv`;
-        let teamScoreMap = {};
-        let teamRankMap = {};
 
         document.querySelectorAll('.btn').forEach(b => b.addEventListener('click', () => {
             document.querySelectorAll('.btn').forEach(x => x.classList.remove('on'));
@@ -218,85 +216,6 @@
             return R;
         }
 
-        // Build maps: team name -> score, team name -> rank
-        function buildMaps(data) {
-            teamScoreMap = {};
-            teamRankMap = {};
-            if (!data || data.length === 0) return;
-            const dr = data.filter(r => r.some(v => v !== ''));
-            if (dr.length === 0) return;
-
-            let bodyRows = dr;
-            // Check if first row is header
-            const fr = dr[0];
-            if (fr.some(v => isNaN(parseFloat(v)) && v && !v.match(/^\d/))) {
-                bodyRows = dr.slice(1);
-            }
-
-            // For K1:L9, we have 2 columns per row
-            // Try to figure out which is name and which is score
-            bodyRows.forEach((row, idx) => {
-                if (row.length < 2) return;
-                let nameCell = '', scoreCell = '';
-
-                // Column 0 could be rank or name, Column 1 could be name or score
-                // Strategy: find the text cell and the number cell
-                for (let c = 0; c < row.length; c++) {
-                    const v = row[c];
-                    const num = parseFloat(v.replace(/[,.]/g, (m, o, s) => {
-                        // Handle Vietnamese number format
-                        return m;
-                    }));
-
-                    if (!isNaN(num) && v.match(/[\d]/) && v.length < 20) {
-                        scoreCell = v;
-                    } else if (v.length > 0) {
-                        nameCell = v;
-                    }
-                }
-
-                // If column 0 is numeric (rank) and column 1 is name, or vice versa
-                // For 2 columns: if col0 is numeric and col1 is text -> col1=name, col0=rank
-                // If col0 is text and col1 is numeric -> col0=name, col1=score
-                if (!nameCell && !scoreCell) {
-                    // Fallback: treat col 0 as name, col 1 as score
-                    nameCell = row[0];
-                    scoreCell = row[1];
-                }
-
-                if (nameCell) {
-                    const key = nameCell.trim().toLowerCase();
-                    if (scoreCell) {
-                        teamScoreMap[key] = scoreCell.trim();
-                    }
-                    teamRankMap[key] = (idx + 1);
-                }
-            });
-        }
-
-        function findScore(teamName) {
-            if (!teamName) return '';
-            const key = teamName.trim().toLowerCase();
-            // Direct match
-            if (teamScoreMap[key] !== undefined) return teamScoreMap[key];
-            if (teamRankMap[key] !== undefined) return `Hạng ${teamRankMap[key]}`;
-            // Partial match
-            for (const [k, v] of Object.entries(teamScoreMap)) {
-                if (k.includes(key) || key.includes(k)) return v;
-            }
-            return '';
-        }
-
-        function findRank(teamName) {
-            if (!teamName) return '';
-            const key = teamName.trim().toLowerCase();
-            if (teamRankMap[key] !== undefined) return teamRankMap[key];
-            for (const [k, v] of Object.entries(teamRankMap)) {
-                if (k.includes(key) || key.includes(k)) return v;
-            }
-            return '';
-        }
-
         // Render Rankings
         function renderRankings(data) {
             const el = document.getElementById('cr');
@@ -307,9 +226,6 @@
             let h = ['Hạng', 'Dữ Liệu'], bodyRows = dr;
             const fr = dr[0];
             if (fr.some(v => isNaN(parseFloat(v)) && v && !v.match(/^\d/))) { h = fr; bodyRows = dr.slice(1); }
-
-            // Build lookup maps from ranking data
-            buildMaps(data);
 
             // Podium
             let pod = '';
@@ -327,7 +243,7 @@
                     }
                     if (!nameVal) nameVal = row[0] || row[1] || '';
                     if (!scoreVal) scoreVal = row[1] || row[0] || '';
-                    pod += `<div class="pi ${x.c}"><div class="pe">${x.e}</div><div class="pn">${nameVal}</div><div class="pv">${scoreVal} pts</div></div>`;
+                    pod += `<div class="pi ${x.c}"><div class="pe">${x.e}</div><div class="pn">${nameVal}</div><div class="pv">${scoreVal}</div></div>`;
                 });
                 pod += '</div>';
             }
@@ -348,43 +264,43 @@
             document.getElementById('ur').textContent = `Cập nhật: ${new Date().toLocaleString('vi-VN')}`;
         }
 
-        // Render Schedule with team scores
+        // Render Schedule with explicit E (index 4) and F (index 5) scores
         function renderSchedule(data) {
             const el = document.getElementById('cs');
             if (!data || data.length <= 1) { el.innerHTML = '<div class="er"><i>📭</i>Không có dữ liệu</div>'; return; }
             const h = data[0], bodyRows = data.slice(1).filter(r => r.some(v => v !== ''));
             if (!bodyRows.length) { el.innerHTML = '<div class="er"><i>📭</i>Không có dữ liệu</div>'; return; }
 
+            // Map columns
             const fc = k => h.findIndex(x => x.toLowerCase().includes(k));
             const cd = fc('ngày') >= 0 ? fc('ngày') : fc('date') >= 0 ? fc('date') : fc('thời') >= 0 ? fc('thời') : 0;
             const cRd = fc('vòng') >= 0 ? fc('vòng') : fc('round') >= 0 ? fc('round') : -1;
             const c1 = fc('đội 1') >= 0 ? fc('đội 1') : fc('team 1') >= 0 ? fc('team 1') : fc('nhà') >= 0 ? fc('nhà') : 2;
             const c2 = fc('đội 2') >= 0 ? fc('đội 2') : fc('team 2') >= 0 ? fc('team 2') : fc('khách') >= 0 ? fc('khách') : 3;
-            const cTm = fc('giờ') >= 0 ? fc('giờ') : fc('time') >= 0 ? fc('time') : -1;
-            const cCt = fc('sân') >= 0 ? fc('sân') : fc('court') >= 0 ? fc('court') : -1;
-            const cSt = fc('trạng') >= 0 ? fc('trạng') : fc('status') >= 0 ? fc('status') : fc('kết') >= 0 ? fc('kết') : -1;
+            const cSt = fc('trạng') >= 0 ? fc('trạng') : fc('status') >= 0 ? fc('status') : fc('kết') >= 0 ? fc('kết') : 6;
+            
+            // Explicit column mapping for scores from columns E and F
+            // A=0, B=1, C=2, D=3, E=4, F=5, G=6
+            const cScore1 = 4; // Cột E
+            const cScore2 = 5; // Cột F
 
             let cards = '';
-            bodyRows.forEach((row, idx) => {
-                const dt = cd >= 0 ? (row[cd] || '') : '';
+            bodyRows.forEach((row) => {
+                const dt = row[cd] || '';
                 const rd = cRd >= 0 ? (row[cRd] || '') : '';
                 const t1 = c1 >= 0 ? (row[c1] || 'Đội 1') : 'Đội 1';
                 const t2 = c2 >= 0 ? (row[c2] || 'Đội 2') : 'Đội 2';
-                const tm = cTm >= 0 ? (row[cTm] || '') : '';
-                const ct = cCt >= 0 ? (row[cCt] || '') : '';
                 const st = cSt >= 0 ? (row[cSt] || '') : '';
+                
+                // Read scores directly from columns E and F
+                const score1 = row[cScore1] || '-';
+                const score2 = row[cScore2] || '-';
 
                 let ds = dt;
                 if (dt) { try { const d = new Date(dt); if (!isNaN(d)) ds = d.toLocaleDateString('vi-VN', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' }); } catch(e) {} }
 
                 const i1 = t1.substring(0, 2).toUpperCase();
                 const i2 = t2.substring(0, 2).toUpperCase();
-
-                // Find team scores from rankings
-                const score1 = findScore(t1);
-                const score2 = findScore(t2);
-                const rank1 = findRank(t1);
-                const rank2 = findRank(t2);
 
                 let sh = '';
                 if (st) {
@@ -407,7 +323,7 @@
                             <div>
                                 <div class="tn">${t1}</div>
                                 <div class="ts">Đội nhà</div>
-                                ${score1 ? `<div class="team-pts">⭐ ${score1} pts ${rank1 ? `· Hạng ${rank1}` : ''}</div>` : ''}
+                                <div class="team-score">⭐ ${score1} pts</div>
                             </div>
                         </div>
                         <div class="vs">VS</div>
@@ -416,13 +332,11 @@
                             <div>
                                 <div class="tn">${t2}</div>
                                 <div class="ts">Đội khách</div>
-                                ${score2 ? `<div class="team-pts">⭐ ${score2} pts ${rank2 ? `· Hạng ${rank2}` : ''}</div>` : ''}
+                                <div class="team-score">⭐ ${score2} pts</div>
                             </div>
                         </div>
                     </div>
                     <div class="mx">
-                        ${tm ? `<div class="mi">⏰ ${tm}</div>` : ''}
-                        ${ct ? `<div class="mi">🏟️ ${ct}</div>` : ''}
                         ${st ? `<div class="mi">${sh}</div>` : ''}
                     </div>
                 </div>`;
