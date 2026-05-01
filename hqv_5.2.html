@@ -825,7 +825,7 @@
             var ckContainer = document.getElementById('chungket-container');
             var ckData = await fetchSheetData('ck', 'A3:C4');
             if (ckData) {
-                var ckHTML = renderMatchTable(ckData, 'Chung Kết - Sân MINA MINƠ');
+                var ckHTML = renderMatchTable(ckData, 'Chung Kết');
                 if (ckHTML) {
                     ckContainer.innerHTML = ckHTML;
                 } else {
